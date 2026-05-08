@@ -1,0 +1,312 @@
+// Smart ATS — Prisma schema
+// Local dev: SQLite (set DATABASE_URL="file:./dev.db")
+// Prod: switch provider to "postgresql" before deploying to Neon.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- NextAuth tables ----------
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+
+  bookingLink      String?
+  company          String?
+  industry         String?
+  recruiterCategory String?
+
+  accounts      Account[]
+  sessions      Session[]
+  jobs          Job[]
+  candidates    Candidate[]
+  usage         UsageMeter[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  @@unique([identifier, token])
+}
+
+// ---------- App tables ----------
+// Status strings kept as plain strings (no Postgres enum so migrations are simpler).
+// Allowed JobStatus: "DRAFT" | "ACTIVE" | "CLOSED"
+// Allowed CandidateStatus: "NEW" | "SCREENING" | "SHORTLISTED" | "INTERVIEWING" | "OFFER" | "HIRED" | "REJECTED" | "WITHDRAWN"
+
+model Job {
+  id              String      @id @default(cuid())
+  userId          String
+  title           String      @default("Untitled role")
+  rawJD           String
+  // legacy single boolean string — new fields below
+  booleanString   String?
+  personaSummary  String?
+  status          String      @default("ACTIVE")
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // AI-generated sourcing outputs
+  booleanLinkedIn String?
+  booleanNaukri   String?
+  booleanXRay     String?
+  targetCompanies String      @default("[]")  // JSON string[]
+  altDesignations String      @default("[]")  // JSON string[]
+  nichePlatforms  String      @default("[]")  // JSON string[]
+
+  // Recruiter-filled intake details
+  interviewRounds String      @default("[]")  // JSON {name,details}[] of stages
+  minExperience   Float?
+  maxExperience   Float?
+  locationPref    String?
+  notes           String?     // Additional recruiter comments
+  industry        String?     // Hiring industry
+  companyTier     String?     // e.g. "Series A-B Startup", "MNC", "Unicorn"
+
+  // AI-generated LinkedIn-ready JD
+  linkedInJD      String?
+
+  // AI-generated market intelligence (JSON)
+  marketIntelligence String?
+
+  user                  User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  candidates            Candidate[]
+  candidateApplications CandidateJobApplication[]
+  shareLinks            ShareLink[]
+
+  @@index([userId])
+}
+
+model Candidate {
+  id              String          @id @default(cuid())
+  userId          String
+  jobId           String?
+  name            String?
+  email           String?
+  phone           String?
+  currentTitle    String?
+  currentCompany  String?
+  yearsExperience Float?
+  // JSON-encoded string array — works on SQLite & Postgres alike
+  skills          String          @default("[]")
+  noticePeriod    String?
+  currentSalary   String?
+  expectedSalary  String?
+  location        String?
+  score           Int?
+  scoreRationale  String?
+  rawSource       String
+  sourceType      String          @default("resume")
+  status          String          @default("NEW")
+
+  // Sourcing attribution
+  source          String?         // LINKEDIN | NAUKRI | REFERRAL | INBOUND | OTHER
+
+  // Free-text tags for future pipeline management (JSON string[])
+  tags            String          @default("[]")
+
+  // Recruiter rough notes (free-form, always editable)
+  recruiterRawNotes String?
+
+  // AI-generated screening kit (Phase 2)
+  pitchDeck       String?         // pitch paragraph for candidate
+  gapAnalysis     String?         // specific gaps vs JD
+  screeningQuestions String       @default("[]")  // JSON string[]
+  recruiterNotes  String?         // internal notes
+  processEmail    String?         // process email draft
+  processWhatsapp String?         // shorter WhatsApp version
+  currentRound    String?         // current interview stage
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  user            User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job             Job?                       @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  emailDrafts     EmailDraft[]
+  applications    CandidateJobApplication[]
+  communications  Communication[]
+
+  @@index([userId])
+  @@index([jobId])
+}
+
+model CandidateJobApplication {
+  id             String    @id @default(cuid())
+  candidateId    String
+  jobId          String
+  status         String    @default("NEW")
+  score          Int?
+  scoreRationale String?
+  currentRound   String?   // deprecated — use currentStage
+  currentStage   String?   // which interviewRound the candidate is in
+  rejectReason   String?   // EXPERIENCE | COMPENSATION | SKILLS | CULTURE | WITHDREW | OTHER
+  rejectedAt     DateTime?
+  scheduledAt    DateTime? // when the next interview is scheduled
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  candidate      Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job            Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  roundFeedback  RoundFeedback[]
+  communications Communication[]
+
+  @@unique([candidateId, jobId])
+  @@index([candidateId])
+  @@index([jobId])
+}
+
+model RoundFeedback {
+  id             String    @id @default(cuid())
+  applicationId  String
+  roundName      String
+  interviewerName String?
+  decision       String    @default("PENDING") // PENDING | GO | NO_GO | MAYBE
+  notes          String?
+  nextStep       String?
+  createdAt      DateTime  @default(now())
+
+  application    CandidateJobApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+}
+
+model Communication {
+  id            String    @id @default(cuid())
+  candidateId   String
+  applicationId String?
+  channel       String    @default("EMAIL") // EMAIL | WHATSAPP | CALL | OTHER
+  direction     String    @default("OUT")   // IN | OUT
+  subject       String?
+  body          String?
+  occurredAt    DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+
+  candidate     Candidate               @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  application   CandidateJobApplication? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+
+  @@index([candidateId, occurredAt])
+  @@index([applicationId])
+}
+
+model ShareLink {
+  id           String    @id @default(cuid())
+  jobId        String
+  token        String    @unique @default(cuid())
+  requireEmail Boolean   @default(false)
+  expiresAt    DateTime?
+  revokedAt    DateTime?
+  createdById  String
+  createdAt    DateTime  @default(now())
+
+  job          Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  feedback     ShareFeedback[]
+
+  @@index([jobId])
+  @@index([token])
+}
+
+model ShareFeedback {
+  id            String    @id @default(cuid())
+  shareLinkId   String
+  applicationId String
+  viewerEmail   String?
+  decision      String    @default("PENDING") // PENDING | UP | DOWN | INTERVIEW
+  note          String?
+  createdAt     DateTime  @default(now())
+
+  shareLink     ShareLink @relation(fields: [shareLinkId], references: [id], onDelete: Cascade)
+
+  @@index([shareLinkId])
+  @@index([applicationId])
+}
+
+model BulkUploadJob {
+  id          String    @id @default(cuid())
+  userId      String
+  totalCount  Int       @default(0)
+  doneCount   Int       @default(0)
+  status      String    @default("PENDING") // PENDING | RUNNING | DONE | FAILED
+  jobId       String?   // optional: link all candidates to this job
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  items       BulkUploadItem[]
+
+  @@index([userId])
+}
+
+model BulkUploadItem {
+  id            String    @id @default(cuid())
+  bulkJobId     String
+  filename      String
+  status        String    @default("PENDING") // PENDING | PROCESSING | DONE | FAILED | SKIPPED_QUOTA
+  candidateId   String?
+  errorMsg      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  bulkJob       BulkUploadJob @relation(fields: [bulkJobId], references: [id], onDelete: Cascade)
+
+  @@index([bulkJobId])
+}
+
+model EmailDraft {
+  id           String     @id @default(cuid())
+  candidateId  String
+  subject      String
+  body         String
+  bookingLink  String?
+  draftType    String     @default("SCHEDULING")  // SCHEDULING | REMINDER
+  createdAt    DateTime   @default(now())
+
+  candidate    Candidate  @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  @@index([candidateId])
+}
+
+model UsageMeter {
+  id        String   @id @default(cuid())
+  userId    String
+  yearMonth String
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, yearMonth])
+  @@index([userId])
+}
