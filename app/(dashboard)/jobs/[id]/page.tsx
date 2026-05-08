@@ -102,7 +102,7 @@ export default async function JobDetailPage({
   return (
     <div className="space-y-0">
       {/* ── Sticky page header ── */}
-      <div className="sticky top-0 z-30 -mx-6 bg-white/95 backdrop-blur border-b border-slate-200 px-6 md:-mx-8 md:px-8 shadow-sm shadow-slate-900/[0.03]">
+      <div className="sticky top-14 md:top-0 z-30 -mx-4 md:-mx-8 bg-white/95 backdrop-blur border-b border-slate-200 px-4 md:px-8 shadow-sm shadow-slate-900/[0.03]">
         <div className="flex items-center gap-3 py-3">
           <Button asChild variant="ghost" size="icon" className="shrink-0 h-8 w-8 rounded-lg hover:bg-slate-100">
             <Link href="/jobs"><ArrowLeft className="h-4 w-4" /></Link>

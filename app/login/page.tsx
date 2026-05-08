@@ -104,10 +104,7 @@ export default async function LoginPage({
 
           <div className="mt-10 pt-6 border-t border-slate-100">
             <p className="text-center text-xs text-slate-400">
-              No account?{" "}
-              <Link href="/login" className="font-semibold text-blue-600 hover:text-blue-700">
-                It&apos;s free to start →
-              </Link>
+              No account? Signing in with Google creates one instantly — it&apos;s free.
             </p>
           </div>
         </div>

@@ -32,7 +32,7 @@ export function CandidateTabs({
 
   return (
     <div>
-      <div className="sticky top-[49px] z-20 -mx-6 bg-white/95 backdrop-blur border-b border-slate-200 px-6 md:-mx-8 md:px-8 shadow-sm shadow-slate-900/[0.03]">
+      <div className="sticky top-[calc(3.5rem+49px)] md:top-[49px] z-20 -mx-4 md:-mx-8 bg-white/95 backdrop-blur border-b border-slate-200 px-4 md:px-8 shadow-sm shadow-slate-900/[0.03]">
         <nav className="flex" role="tablist">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button

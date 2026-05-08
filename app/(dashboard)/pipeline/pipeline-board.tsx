@@ -137,12 +137,13 @@ export function PipelineBoard({ applications, jobs }: { applications: AppCard[];
         </div>
       </div>
 
-      {/* Active columns */}
-      <div className="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+      {/* Active columns — scroll horizontally on mobile */}
+      <div className="-mx-4 md:mx-0 overflow-x-auto pb-2">
+      <div className="flex gap-3 px-4 md:px-0 md:grid md:grid-cols-3 lg:grid-cols-6" style={{ minWidth: "min-content" }}>
         {ACTIVE_STAGES.map((col) => {
           const cards = byStatus[col.status];
           return (
-            <div key={col.status} className="flex flex-col gap-2.5 min-w-0">
+            <div key={col.status} className="flex flex-col gap-2.5 min-w-[160px] md:min-w-0">
               {/* Column header */}
               <div className="flex items-center justify-between">
                 <div className={`flex items-center gap-1.5 rounded-full bg-gradient-to-r ${col.col} px-2.5 py-1 shadow-sm`}>
@@ -164,6 +165,7 @@ export function PipelineBoard({ applications, jobs }: { applications: AppCard[];
             </div>
           );
         })}
+      </div>
       </div>
 
       {/* Closed stages */}

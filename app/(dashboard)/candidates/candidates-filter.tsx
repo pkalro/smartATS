@@ -163,11 +163,11 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
               <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Candidate</th>
               <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Roles</th>
               <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Score</th>
-              <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Skills</th>
-              <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Notice</th>
-              <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Salary</th>
-              <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Source</th>
-              <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Updated</th>
+              <th className="hidden md:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Skills</th>
+              <th className="hidden lg:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Notice</th>
+              <th className="hidden lg:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Salary</th>
+              <th className="hidden xl:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Source</th>
+              <th className="hidden sm:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Updated</th>
               <th className="w-8" />
             </tr>
           </thead>
@@ -221,7 +221,7 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
                       )}
                     </td>
                     <td className="px-5 py-3.5"><ScoreChip score={c.score} /></td>
-                    <td className="px-5 py-3.5">
+                    <td className="hidden md:table-cell px-5 py-3.5">
                       <div className="flex flex-wrap gap-1">
                         {skills.slice(0, 3).map((s) => (
                           <span key={s} className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-600 font-medium">{s}</span>
@@ -229,16 +229,16 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
                         {skills.length > 3 && <span className="text-[11px] text-slate-400">+{skills.length - 3}</span>}
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">{c.noticePeriod || <span className="text-slate-300">—</span>}</td>
-                    <td className="px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">{c.currentSalary || <span className="text-slate-300">—</span>}</td>
-                    <td className="px-5 py-3.5">
+                    <td className="hidden lg:table-cell px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">{c.noticePeriod || <span className="text-slate-300">—</span>}</td>
+                    <td className="hidden lg:table-cell px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">{c.currentSalary || <span className="text-slate-300">—</span>}</td>
+                    <td className="hidden xl:table-cell px-5 py-3.5">
                       {c.source ? (
                         <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">
                           {c.source.charAt(0) + c.source.slice(1).toLowerCase()}
                         </span>
                       ) : <span className="text-slate-300 text-xs">—</span>}
                     </td>
-                    <td className={`px-5 py-3.5 text-xs whitespace-nowrap font-medium ${isStale ? "text-amber-600" : "text-slate-400"}`}>
+                    <td className={`hidden sm:table-cell px-5 py-3.5 text-xs whitespace-nowrap font-medium ${isStale ? "text-amber-600" : "text-slate-400"}`}>
                       {days === 0 ? "today" : `${days}d ago`}
                     </td>
                     <td className="pr-4">
