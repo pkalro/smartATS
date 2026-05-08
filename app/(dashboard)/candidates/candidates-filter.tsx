@@ -97,13 +97,13 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
     <div>
       {/* Filter bar */}
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 px-4 py-3">
-        <div className="relative">
+        <div className="relative w-full sm:w-auto">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search name, title, job…"
-            className="h-8 w-52 rounded-lg border-0 bg-slate-50 pl-8 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="h-8 w-full sm:w-52 rounded-lg border-0 bg-slate-50 pl-8 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
 
@@ -155,104 +155,147 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-slate-100 text-left">
-              <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Candidate</th>
-              <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Roles</th>
-              <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Score</th>
-              <th className="hidden md:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Skills</th>
-              <th className="hidden lg:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Notice</th>
-              <th className="hidden lg:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Salary</th>
-              <th className="hidden xl:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Source</th>
-              <th className="hidden sm:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Updated</th>
-              <th className="w-8" />
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-50">
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan={9} className="px-5 py-12 text-center text-sm text-slate-400">
-                  No candidates match your filters.
-                </td>
-              </tr>
-            ) : (
-              filtered.map((c) => {
-                const skills = parseSkills(c.skills);
-                const days = daysSince(c.updatedAt);
-                const isStale = days >= 3 && !["HIRED","REJECTED","WITHDRAWN"].includes(c.status);
-
-                return (
-                  <tr key={c.id} className="group hover:bg-slate-50/70 transition-colors">
-                    <td className="px-5 py-3.5">
-                      <Link href={`/candidates/${c.id}`} className="block">
-                        <div className="font-semibold text-slate-900 group-hover:text-blue-700 transition-colors truncate max-w-[160px]">
-                          {c.name || "Unnamed"}
-                        </div>
-                        {c.currentTitle && <div className="text-xs text-slate-500 truncate max-w-[160px]">{c.currentTitle}</div>}
-                        {c.email && <div className="text-[11px] text-slate-400 font-mono truncate max-w-[160px]">{c.email}</div>}
-                      </Link>
-                    </td>
-                    <td className="px-5 py-3.5">
-                      {c.applications.length === 0 ? (
-                        <span className="text-xs text-slate-300">—</span>
-                      ) : (
-                        <div className="flex flex-col gap-1.5">
-                          {c.applications.slice(0, 2).map((a, i) => (
-                            <div key={a.jobId} className="flex items-center gap-1.5">
-                              <Link href={`/jobs/${a.jobId}`} className="text-xs text-slate-600 hover:text-blue-600 hover:underline truncate max-w-[110px]">
-                                {a.jobTitle}
-                              </Link>
-                              {i === 0 && c.primaryApplicationId ? (
-                                <StageSelect applicationId={c.primaryApplicationId} status={a.status} />
-                              ) : (
-                                <span className={`shrink-0 rounded-full border px-1.5 py-px text-[10px] font-semibold ${STATUS_STYLES[a.status] ?? "bg-slate-100 text-slate-500"}`}>
-                                  {a.status.charAt(0) + a.status.slice(1).toLowerCase()}
-                                </span>
-                              )}
-                            </div>
-                          ))}
-                          {c.applications.length > 2 && (
-                            <span className="text-xs text-slate-400">+{c.applications.length - 2} more</span>
-                          )}
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-5 py-3.5"><ScoreChip score={c.score} /></td>
-                    <td className="hidden md:table-cell px-5 py-3.5">
-                      <div className="flex flex-wrap gap-1">
-                        {skills.slice(0, 3).map((s) => (
-                          <span key={s} className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-600 font-medium">{s}</span>
-                        ))}
-                        {skills.length > 3 && <span className="text-[11px] text-slate-400">+{skills.length - 3}</span>}
-                      </div>
-                    </td>
-                    <td className="hidden lg:table-cell px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">{c.noticePeriod || <span className="text-slate-300">—</span>}</td>
-                    <td className="hidden lg:table-cell px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">{c.currentSalary || <span className="text-slate-300">—</span>}</td>
-                    <td className="hidden xl:table-cell px-5 py-3.5">
-                      {c.source ? (
-                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">
-                          {c.source.charAt(0) + c.source.slice(1).toLowerCase()}
+      {filtered.length === 0 ? (
+        <p className="px-5 py-12 text-center text-sm text-slate-400">No candidates match your filters.</p>
+      ) : (
+        <>
+          {/* ── Mobile card list (< md) ── */}
+          <div className="md:hidden divide-y divide-slate-100">
+            {filtered.map((c) => {
+              const days = daysSince(c.updatedAt);
+              const isStale = days >= 3 && !["HIRED","REJECTED","WITHDRAWN"].includes(c.status);
+              const app = c.applications[0];
+              return (
+                <Link key={c.id} href={`/candidates/${c.id}`}
+                  className="flex items-center gap-3 px-4 py-3.5 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+                  {/* Avatar */}
+                  <div className="shrink-0 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-violet-100 text-sm font-bold text-blue-700">
+                    {(c.name ?? "?").charAt(0).toUpperCase()}
+                  </div>
+                  {/* Main info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-semibold text-slate-900 truncate text-sm">{c.name || "Unnamed"}</span>
+                      {c.score != null && <ScoreChip score={c.score} />}
+                    </div>
+                    {c.currentTitle && (
+                      <p className="text-xs text-slate-500 truncate">{c.currentTitle}{c.email ? ` · ${c.email}` : ""}</p>
+                    )}
+                    {app && (
+                      <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+                        <span className="text-[11px] text-slate-400 truncate max-w-[140px]">{app.jobTitle}</span>
+                        <span className={`shrink-0 rounded-full border px-1.5 py-px text-[10px] font-semibold ${STATUS_STYLES[app.status] ?? "bg-slate-100 text-slate-500"}`}>
+                          {app.status.charAt(0) + app.status.slice(1).toLowerCase()}
                         </span>
-                      ) : <span className="text-slate-300 text-xs">—</span>}
-                    </td>
-                    <td className={`hidden sm:table-cell px-5 py-3.5 text-xs whitespace-nowrap font-medium ${isStale ? "text-amber-600" : "text-slate-400"}`}>
-                      {days === 0 ? "today" : `${days}d ago`}
-                    </td>
-                    <td className="pr-4">
-                      <Link href={`/candidates/${c.id}`} className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-300 hover:text-blue-600 hover:bg-blue-50 opacity-0 group-hover:opacity-100 transition-all">
-                        <ChevronRight className="h-3.5 w-3.5" />
-                      </Link>
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+                        {c.applications.length > 1 && (
+                          <span className="text-[11px] text-slate-400">+{c.applications.length - 1}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  {/* Right meta */}
+                  <div className="shrink-0 flex flex-col items-end gap-1">
+                    <span className={`text-[11px] font-medium ${isStale ? "text-amber-500" : "text-slate-400"}`}>
+                      {days === 0 ? "today" : `${days}d`}
+                    </span>
+                    <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* ── Desktop table (≥ md) ── */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-100 text-left">
+                  <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Candidate</th>
+                  <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Roles</th>
+                  <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Score</th>
+                  <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Skills</th>
+                  <th className="hidden lg:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Notice</th>
+                  <th className="hidden lg:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Salary</th>
+                  <th className="hidden xl:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Source</th>
+                  <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Updated</th>
+                  <th className="w-8" />
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50">
+                {filtered.map((c) => {
+                  const skills = parseSkills(c.skills);
+                  const days = daysSince(c.updatedAt);
+                  const isStale = days >= 3 && !["HIRED","REJECTED","WITHDRAWN"].includes(c.status);
+                  return (
+                    <tr key={c.id} className="group hover:bg-slate-50/70 transition-colors">
+                      <td className="px-5 py-3.5">
+                        <Link href={`/candidates/${c.id}`} className="block">
+                          <div className="font-semibold text-slate-900 group-hover:text-blue-700 transition-colors truncate max-w-[160px]">
+                            {c.name || "Unnamed"}
+                          </div>
+                          {c.currentTitle && <div className="text-xs text-slate-500 truncate max-w-[160px]">{c.currentTitle}</div>}
+                          {c.email && <div className="text-[11px] text-slate-400 font-mono truncate max-w-[160px]">{c.email}</div>}
+                        </Link>
+                      </td>
+                      <td className="px-5 py-3.5">
+                        {c.applications.length === 0 ? (
+                          <span className="text-xs text-slate-300">—</span>
+                        ) : (
+                          <div className="flex flex-col gap-1.5">
+                            {c.applications.slice(0, 2).map((a, i) => (
+                              <div key={a.jobId} className="flex items-center gap-1.5">
+                                <Link href={`/jobs/${a.jobId}`} className="text-xs text-slate-600 hover:text-blue-600 hover:underline truncate max-w-[110px]">
+                                  {a.jobTitle}
+                                </Link>
+                                {i === 0 && c.primaryApplicationId ? (
+                                  <StageSelect applicationId={c.primaryApplicationId} status={a.status} />
+                                ) : (
+                                  <span className={`shrink-0 rounded-full border px-1.5 py-px text-[10px] font-semibold ${STATUS_STYLES[a.status] ?? "bg-slate-100 text-slate-500"}`}>
+                                    {a.status.charAt(0) + a.status.slice(1).toLowerCase()}
+                                  </span>
+                                )}
+                              </div>
+                            ))}
+                            {c.applications.length > 2 && (
+                              <span className="text-xs text-slate-400">+{c.applications.length - 2} more</span>
+                            )}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-5 py-3.5"><ScoreChip score={c.score} /></td>
+                      <td className="px-5 py-3.5">
+                        <div className="flex flex-wrap gap-1">
+                          {skills.slice(0, 3).map((s) => (
+                            <span key={s} className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-600 font-medium">{s}</span>
+                          ))}
+                          {skills.length > 3 && <span className="text-[11px] text-slate-400">+{skills.length - 3}</span>}
+                        </div>
+                      </td>
+                      <td className="hidden lg:table-cell px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">{c.noticePeriod || <span className="text-slate-300">—</span>}</td>
+                      <td className="hidden lg:table-cell px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">{c.currentSalary || <span className="text-slate-300">—</span>}</td>
+                      <td className="hidden xl:table-cell px-5 py-3.5">
+                        {c.source ? (
+                          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">
+                            {c.source.charAt(0) + c.source.slice(1).toLowerCase()}
+                          </span>
+                        ) : <span className="text-slate-300 text-xs">—</span>}
+                      </td>
+                      <td className={`px-5 py-3.5 text-xs whitespace-nowrap font-medium ${isStale ? "text-amber-600" : "text-slate-400"}`}>
+                        {days === 0 ? "today" : `${days}d ago`}
+                      </td>
+                      <td className="pr-4">
+                        <Link href={`/candidates/${c.id}`} className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-300 hover:text-blue-600 hover:bg-blue-50 opacity-0 group-hover:opacity-100 transition-all">
+                          <ChevronRight className="h-3.5 w-3.5" />
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
     </div>
   );
 }

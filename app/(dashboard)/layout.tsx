@@ -88,10 +88,15 @@ export default async function DashboardLayout({
             </div>
             <span className="font-bold text-slate-900 text-sm tracking-tight">Smart ATS</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Link href="/settings" className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100">
+          <div className="flex items-center gap-1">
+            <Link href="/settings" className="rounded-lg p-2 text-slate-400 hover:bg-slate-100">
               <Settings className="h-4 w-4" />
             </Link>
+            <form action={async () => { "use server"; await signOut({ redirectTo: "/" }); }}>
+              <button type="submit" title="Sign out" className="rounded-lg p-2 text-slate-400 hover:bg-slate-100">
+                <LogOut className="h-4 w-4" />
+              </button>
+            </form>
             {avatar}
           </div>
         </header>
