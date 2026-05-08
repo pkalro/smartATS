@@ -17,3 +17,4 @@ next-env.d.ts
 .turbo
 prisma/dev.db
 tsconfig.tsbuildinfo
+env.local
