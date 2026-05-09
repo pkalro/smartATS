@@ -7,6 +7,7 @@ import { fileToText } from "@/lib/parse-file";
 import { assertUnderCap, incrementUsage, UsageCapError } from "@/lib/usage";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { trackEvent } from "@/lib/posthog";
 
 function jsonArr(val: unknown): string {
   return JSON.stringify(Array.isArray(val) ? val : []);
@@ -68,6 +69,7 @@ export async function createJobFromJD(formData: FormData) {
       },
     });
 
+    await trackEvent(userId, "job_created", { title: a.title || "Untitled role" });
     revalidatePath("/jobs");
     redirect(`/jobs/${job.id}`);
   } catch (e) {
@@ -318,6 +320,7 @@ export async function generateMarketIntelligenceAction(jobId: string) {
       where: { id: jobId },
       data: { marketIntelligence: JSON.stringify(intel) },
     });
+    await trackEvent(userId, "market_intelligence_generated", { job_title: job.title });
     revalidatePath(`/jobs/${jobId}`);
     return { ok: true as const, intel };
   } catch (e) {

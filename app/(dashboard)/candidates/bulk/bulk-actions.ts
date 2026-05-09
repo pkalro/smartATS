@@ -8,6 +8,7 @@ import { screenCandidate } from "@/lib/ai/resume";
 import { serializeSkills } from "@/lib/skills";
 import { assertUnderCap, incrementUsage, UsageCapError } from "@/lib/usage";
 import { toNullableFloat, toNullableInt, toNullableString } from "@/lib/sanitize-candidate";
+import { trackEvent } from "@/lib/posthog";
 
 const MAX_FILES = 25;
 const MAX_CHARS = 30_000;
@@ -48,6 +49,10 @@ export async function startBulkUpload(formData: FormData) {
     });
   }
 
+  await trackEvent(userId, "bulk_upload_started", {
+    file_count: files.length,
+    has_job: !!jobId,
+  });
   revalidatePath("/candidates/bulk");
   return { jobId: bulkJob.id };
 }
@@ -229,6 +234,15 @@ export async function triggerBulkAnalysis(bulkJobId: string) {
   await prisma.bulkUploadJob.update({
     where: { id: bulkJobId },
     data: { status: "DONE" },
+  });
+
+  const doneItems = await prisma.bulkUploadItem.count({ where: { bulkJobId, status: "DONE" } });
+  const failedItems = await prisma.bulkUploadItem.count({ where: { bulkJobId, status: { in: ["FAILED", "SKIPPED_QUOTA"] } } });
+  await trackEvent(userId, "bulk_upload_completed", {
+    total: bulkJob.totalCount,
+    done: doneItems,
+    failed: failedItems,
+    has_job: !!bulkJob.jobId,
   });
 
   revalidatePath("/candidates");

@@ -5,6 +5,8 @@ import { Suspense } from "react";
 import { Icon } from "@/components/icons/icon";
 import { UsageBannerAsync } from "@/components/usage-banner-async";
 import { SidebarNav } from "@/components/sidebar-nav";
+import { PostHogIdentify } from "@/components/posthog-identify";
+import { FeedbackWidget } from "@/components/feedback-widget";
 
 export default async function DashboardLayout({
   children,
@@ -29,6 +31,11 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-slate-50">
+      <PostHogIdentify
+        userId={session.user.id}
+        name={session.user.name}
+        email={session.user.email}
+      />
 
       {/* ── Desktop sidebar ── */}
       <aside className="hidden md:flex md:w-64 shrink-0 flex-col bg-white border-r border-slate-200/80 shadow-sm shadow-slate-900/[0.04]">
@@ -98,6 +105,8 @@ export default async function DashboardLayout({
           <div className="mx-auto max-w-6xl">{children}</div>
         </main>
       </div>
+
+      <FeedbackWidget />
 
       {/* ── Mobile bottom nav ── */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-slate-200 flex items-center justify-around px-1 h-16 safe-bottom">

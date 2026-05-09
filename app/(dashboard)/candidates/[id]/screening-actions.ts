@@ -6,6 +6,7 @@ import { generateScreeningKit } from "@/lib/ai/resume";
 import { assertUnderCap, incrementUsage, UsageCapError } from "@/lib/usage";
 import { parseSkills } from "@/lib/skills";
 import { revalidatePath } from "next/cache";
+import { trackEvent } from "@/lib/posthog";
 
 export async function generateKit(candidateId: string, jobId?: string | null) {
   const session = await auth();
@@ -77,6 +78,9 @@ export async function generateKit(candidateId: string, jobId?: string | null) {
       },
     });
 
+    await trackEvent(userId, "screening_kit_generated", {
+      job_title: targetJob.title,
+    });
     revalidatePath(`/candidates/${candidateId}`);
     return { ok: true as const };
   } catch (e) {

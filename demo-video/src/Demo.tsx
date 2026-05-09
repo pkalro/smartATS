@@ -70,7 +70,7 @@ export function Demo() {
   const bgVolume = interpolate(
     frame,
     [0, 30, durationInFrames - 30, durationInFrames],
-    [0, 0.18, 0.18, 0],
+    [0, 0.25, 0.25, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 

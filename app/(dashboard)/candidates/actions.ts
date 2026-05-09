@@ -10,6 +10,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { CandidateStatus } from "@/lib/types";
 import { toNullableFloat, toNullableInt, toNullableString } from "@/lib/sanitize-candidate";
+import { trackEvent } from "@/lib/posthog";
 
 const MAX_CHARS = 30000;
 
@@ -130,6 +131,12 @@ export async function createCandidate(formData: FormData) {
       });
     }
 
+    await trackEvent(userId, "candidate_screened", {
+      source_type: sourceType,
+      has_job: !!job,
+      score,
+    });
+
     revalidatePath("/candidates");
     if (job) revalidatePath(`/jobs/${job.id}`);
     redirect(`/candidates/${candidate.id}`);
@@ -163,6 +170,11 @@ export async function updateApplicationStatus(
   await prisma.candidate.update({
     where: { id: app.candidateId },
     data: { status },
+  });
+
+  await trackEvent(userId, "pipeline_stage_changed", {
+    from_status: app.status,
+    to_status: status,
   });
 
   revalidatePath(`/candidates/${app.candidateId}`);
@@ -265,6 +277,7 @@ export async function rescreenApplication(applicationId: string) {
       data: { score, scoreRationale: result.scoreRationale },
     });
 
+    await trackEvent(userId, "candidate_rescreened", { score });
     revalidatePath(`/candidates/${app.candidateId}`);
     return { ok: true as const, score, scoreRationale: result.scoreRationale };
   } catch (e) {
