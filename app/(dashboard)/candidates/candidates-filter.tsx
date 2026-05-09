@@ -64,7 +64,10 @@ function ScoreChip({ score }: { score: number | null }) {
             : score >= 50 ? "bg-amber-50 text-amber-700 border-amber-200"
             : "bg-red-50 text-red-600 border-red-200";
   return (
-    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-bold ${cls}`}>
+    <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-bold ${cls}`}>
+      <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+      </svg>
       {score}
     </span>
   );
@@ -169,7 +172,7 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
                 <Link key={c.id} href={`/candidates/${c.id}`}
                   className="flex items-center gap-3 px-4 py-3.5 hover:bg-slate-50 active:bg-slate-100 transition-colors">
                   {/* Avatar */}
-                  <div className="shrink-0 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-violet-100 text-sm font-bold text-blue-700">
+                  <div className="shrink-0 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600 text-sm font-bold text-white shadow-sm">
                     {(c.name ?? "?").charAt(0).toUpperCase()}
                   </div>
                   {/* Main info */}
@@ -210,6 +213,7 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-100 text-left">
+                  <th className="w-12 pl-5 pr-0 py-3" />
                   <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Candidate</th>
                   <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Roles</th>
                   <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Score</th>
@@ -228,6 +232,13 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
                   const isStale = days >= 3 && !["HIRED","REJECTED","WITHDRAWN"].includes(c.status);
                   return (
                     <tr key={c.id} className="group hover:bg-slate-50/70 transition-colors">
+                      <td className="pl-5 pr-0 py-3.5">
+                        <Link href={`/candidates/${c.id}`} className="block">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600 text-sm font-bold text-white shadow-sm">
+                            {(c.name ?? "?").charAt(0).toUpperCase()}
+                          </div>
+                        </Link>
+                      </td>
                       <td className="px-5 py-3.5">
                         <Link href={`/candidates/${c.id}`} className="block">
                           <div className="font-semibold text-slate-900 group-hover:text-blue-700 transition-colors truncate max-w-[160px]">

@@ -41,10 +41,17 @@ function daysSince(date: Date) {
 
 function ScoreChip({ score }: { score: number | null }) {
   if (score == null) return null;
-  const cls = score >= 75 ? "bg-emerald-100 text-emerald-700"
-            : score >= 50 ? "bg-amber-100 text-amber-700"
-            : "bg-red-100 text-red-600";
-  return <span className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${cls}`}>{score}</span>;
+  const cls = score >= 75 ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+            : score >= 50 ? "bg-amber-50 text-amber-700 border-amber-200"
+            : "bg-red-50 text-red-600 border-red-200";
+  return (
+    <span className={`shrink-0 inline-flex items-center gap-0.5 rounded-full border px-1.5 py-0.5 text-[10px] font-bold ${cls}`}>
+      <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+      </svg>
+      {score}
+    </span>
+  );
 }
 
 function CandidateCard({ app }: { app: AppCard }) {
@@ -53,12 +60,18 @@ function CandidateCard({ app }: { app: AppCard }) {
 
   return (
     <Link href={`/candidates/${app.candidateId}`}
-      className="group block rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-all hover:shadow-md hover:border-blue-200 hover:-translate-y-0.5"
+      className="group block rounded-xl border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all hover:shadow-md hover:border-blue-200 hover:-translate-y-0.5"
     >
-      <div className="flex items-start justify-between gap-1.5 mb-1.5">
-        <span className="font-semibold text-slate-800 leading-tight truncate text-[13px] group-hover:text-blue-700 transition-colors">
-          {app.candidateName || "Unnamed"}
-        </span>
+      {/* Avatar row */}
+      <div className="flex items-center justify-between gap-1.5 mb-2">
+        <div className="flex items-center gap-2">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600 text-[11px] font-bold text-white shadow-sm">
+            {(app.candidateName ?? "?").charAt(0).toUpperCase()}
+          </div>
+          <span className="font-semibold text-slate-800 leading-tight truncate text-[13px] group-hover:text-blue-700 transition-colors">
+            {app.candidateName || "Unnamed"}
+          </span>
+        </div>
         <ScoreChip score={app.score} />
       </div>
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Icon } from "@/components/icons/icon";
 import { UsageBannerAsync } from "@/components/usage-banner-async";
+import { SidebarNav } from "@/components/sidebar-nav";
 
 export default async function DashboardLayout({
   children,
@@ -41,17 +42,7 @@ export default async function DashboardLayout({
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 space-y-0.5 p-3 pt-4">
-          <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">Workspace</p>
-          <NavItem href="/dashboard" icon={<Icon name="layout-dashboard" size={4} />}>Dashboard</NavItem>
-          <NavItem href="/jobs"      icon={<Icon name="briefcase" size={4} />}>Jobs</NavItem>
-          <NavItem href="/candidates" icon={<Icon name="users" size={4} />}>Candidates</NavItem>
-          <NavItem href="/pipeline"  icon={<Icon name="kanban" size={4} />}>Pipeline</NavItem>
-          <NavItem href="/reports"   icon={<Icon name="bar-chart" size={4} />}>Reports</NavItem>
-
-          <p className="px-3 pb-2 pt-5 text-[10px] font-bold uppercase tracking-widest text-slate-400">Account</p>
-          <NavItem href="/settings"  icon={<Icon name="settings" size={4} />}>Settings</NavItem>
-        </nav>
+        <SidebarNav />
 
         {/* User footer */}
         <div className="border-t border-slate-100 p-3">
@@ -59,7 +50,7 @@ export default async function DashboardLayout({
             {avatar}
             <div className="flex-1 min-w-0">
               <p className="truncate text-sm font-semibold text-slate-800">{session.user.name}</p>
-              <p className="truncate text-[11px] text-slate-400">{session.user.email}</p>
+              <p className="truncate text-[11px] text-slate-400">Recruiter</p>
             </div>
             <form action={async () => { "use server"; await signOut({ redirectTo: "/" }); }}>
               <button
@@ -117,26 +108,6 @@ export default async function DashboardLayout({
         <MobileNavItem href="/reports"    icon={<Icon name="bar-chart" size={5} />}       label="Reports" />
       </nav>
     </div>
-  );
-}
-
-function NavItem({
-  href,
-  icon,
-  children,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-all hover:bg-blue-50 hover:text-blue-700"
-    >
-      <span className="text-slate-400 group-hover:text-blue-600 transition-colors">{icon}</span>
-      {children}
-    </Link>
   );
 }
 

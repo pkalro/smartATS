@@ -270,9 +270,14 @@ function QueueCard({ title, icon, count, accent, children, footer }: {
 function QueueRow({ href, name, sub, badge }: { href: string; name: string; sub?: string; badge?: string }) {
   return (
     <Link href={href} className="flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-sm hover:bg-slate-50 transition-colors">
-      <div className="min-w-0">
-        <div className="truncate font-medium text-slate-800">{name}</div>
-        {sub && <div className="truncate text-xs text-slate-400 mt-0.5">{sub}</div>}
+      <div className="flex items-center gap-2.5 min-w-0">
+        <div className="shrink-0 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600 text-[11px] font-bold text-white shadow-sm">
+          {name.charAt(0).toUpperCase()}
+        </div>
+        <div className="min-w-0">
+          <div className="truncate font-medium text-slate-800">{name}</div>
+          {sub && <div className="truncate text-xs text-slate-400 mt-0.5">{sub}</div>}
+        </div>
       </div>
       {badge && <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">{badge}</span>}
     </Link>
