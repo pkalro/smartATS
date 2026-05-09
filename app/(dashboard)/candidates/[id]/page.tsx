@@ -152,31 +152,29 @@ export default async function CandidateDetailPage({
             />
 
             {activeApps.length > 0 && (
-              <div className="space-y-4">
-                {activeApps.map((a) => {
+              <RoundFeedback
+                candidateId={candidate.id}
+                apps={activeApps.map((a) => {
                   const rounds: Array<{ name: string }> = (() => {
                     try { return JSON.parse(a.job.interviewRounds); } catch { return []; }
                   })();
                   const roundOptions = rounds.map((r) => r.name).filter(Boolean);
-                  return (
-                    <RoundFeedback
-                      key={a.id}
-                      applicationId={a.id}
-                      candidateId={candidate.id}
-                      feedbackList={a.roundFeedback.map((fb) => ({
-                        id: fb.id,
-                        roundName: fb.roundName,
-                        interviewerName: fb.interviewerName,
-                        decision: fb.decision,
-                        notes: fb.notes,
-                        nextStep: fb.nextStep,
-                        createdAt: fb.createdAt,
-                      }))}
-                      roundOptions={roundOptions.length > 0 ? roundOptions : ["Screening", "Round 1", "Round 2", "Final"]}
-                    />
-                  );
+                  return {
+                    id: a.id,
+                    jobTitle: a.job.title,
+                    roundOptions: roundOptions.length > 0 ? roundOptions : ["Screening", "Round 1", "Round 2", "Final"],
+                    feedbackList: a.roundFeedback.map((fb) => ({
+                      id: fb.id,
+                      roundName: fb.roundName,
+                      interviewerName: fb.interviewerName,
+                      decision: fb.decision,
+                      notes: fb.notes,
+                      nextStep: fb.nextStep,
+                      createdAt: fb.createdAt,
+                    })),
+                  };
                 })}
-              </div>
+              />
             )}
           </div>
         }

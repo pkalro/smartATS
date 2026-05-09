@@ -15,6 +15,13 @@ type Feedback = {
   createdAt: Date;
 };
 
+type AppEntry = {
+  id: string;
+  jobTitle: string;
+  roundOptions: string[];
+  feedbackList: Feedback[];
+};
+
 const DECISION_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
   GO:      { label: "Go",      color: "text-emerald-700 bg-emerald-50 border-emerald-200",  icon: <ThumbsUp   className="h-3 w-3" /> },
   NO_GO:   { label: "No-go",   color: "text-red-600 bg-red-50 border-red-200",              icon: <ThumbsDown className="h-3 w-3" /> },
@@ -22,45 +29,55 @@ const DECISION_CONFIG: Record<string, { label: string; color: string; icon: Reac
   PENDING: { label: "Pending", color: "text-slate-500 bg-slate-50 border-slate-200",        icon: <Minus      className="h-3 w-3" /> },
 };
 
-type Step = "idle" | "pick-round" | "fill-detail";
+type Step = "idle" | "pick-job" | "pick-round" | "fill-detail";
 
 export function RoundFeedback({
-  applicationId,
   candidateId,
-  feedbackList,
-  roundOptions,
+  apps,
 }: {
-  applicationId: string;
   candidateId: string;
-  feedbackList: Feedback[];
-  roundOptions: string[];
+  apps: AppEntry[];
 }) {
   const [pending, start] = useTransition();
   const [step, setStep] = useState<Step>("idle");
 
-  // Step 1 — round picker
-  const [round, setRound]           = useState(roundOptions[0] ?? "");
+  // Which app is selected for new feedback
+  const [selectedAppId, setSelectedAppId] = useState<string>(apps[0]?.id ?? "");
+
+  // Step: pick-round
+  const [round, setRound]             = useState("");
   const [customRound, setCustomRound] = useState("");
 
-  // Step 2 — detail fields
+  // Step: fill-detail
   const [interviewer, setInterviewer] = useState("");
   const [decision, setDecision]       = useState<string>("PENDING");
   const [notes, setNotes]             = useState("");
   const [nextStep, setNextStep]       = useState("");
 
+  const selectedApp = apps.find((a) => a.id === selectedAppId) ?? apps[0];
   const effectiveRound = round === "__custom__" ? customRound : round;
+  const totalFeedback = apps.reduce((sum, a) => sum + a.feedbackList.length, 0);
 
   function reset() {
     setStep("idle");
-    setRound(roundOptions[0] ?? "");
-    setCustomRound("");
+    setSelectedAppId(apps[0]?.id ?? "");
+    setRound(""); setCustomRound("");
     setInterviewer(""); setDecision("PENDING"); setNotes(""); setNextStep("");
   }
 
+  function handleAddClick() {
+    if (apps.length > 1) {
+      setStep("pick-job");
+    } else {
+      setSelectedAppId(apps[0]?.id ?? "");
+      setStep("pick-round");
+    }
+  }
+
   function handleSave() {
-    if (!effectiveRound) return;
+    if (!effectiveRound || !selectedAppId) return;
     const fd = new FormData();
-    fd.set("applicationId", applicationId);
+    fd.set("applicationId",  selectedAppId);
     fd.set("roundName",      effectiveRound);
     fd.set("interviewerName", interviewer);
     fd.set("decision",        decision);
@@ -86,16 +103,16 @@ export function RoundFeedback({
           </div>
           <span className="text-sm font-bold text-slate-800">
             Interview feedback
-            {feedbackList.length > 0 && (
+            {totalFeedback > 0 && (
               <span className="ml-1.5 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-500">
-                {feedbackList.length}
+                {totalFeedback}
               </span>
             )}
           </span>
         </div>
         {step === "idle" && (
           <button
-            onClick={() => setStep("pick-round")}
+            onClick={handleAddClick}
             className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-colors"
           >
             <Plus className="h-3.5 w-3.5" /> Add feedback
@@ -103,50 +120,91 @@ export function RoundFeedback({
         )}
       </div>
 
-      <div className="p-4 space-y-3">
-        {/* ── Existing feedback cards ── */}
-        {feedbackList.map((fb) => {
-          const cfg = DECISION_CONFIG[fb.decision] ?? DECISION_CONFIG.PENDING;
+      <div className="p-4 space-y-4">
+
+        {/* ── Existing feedback, grouped by app ── */}
+        {apps.map((app) => {
+          if (app.feedbackList.length === 0) return null;
           return (
-            <div key={fb.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-              <div className="flex items-start justify-between gap-2">
-                <div className="space-y-1.5 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-semibold text-slate-800 text-sm">{fb.roundName}</span>
-                    <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold ${cfg.color}`}>
-                      {cfg.icon}{cfg.label}
-                    </span>
+            <div key={app.id} className="space-y-2">
+              {/* Job label only when multiple apps */}
+              {apps.length > 1 && (
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">{app.jobTitle}</p>
+              )}
+              {app.feedbackList.map((fb) => {
+                const cfg = DECISION_CONFIG[fb.decision] ?? DECISION_CONFIG.PENDING;
+                return (
+                  <div key={fb.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="space-y-1.5 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-semibold text-slate-800 text-sm">{fb.roundName}</span>
+                          <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold ${cfg.color}`}>
+                            {cfg.icon}{cfg.label}
+                          </span>
+                        </div>
+                        {fb.interviewerName && (
+                          <p className="text-xs text-slate-500">Interviewer: {fb.interviewerName}</p>
+                        )}
+                        {fb.notes && (
+                          <p className="text-sm text-slate-600 leading-relaxed">{fb.notes}</p>
+                        )}
+                        {fb.nextStep && (
+                          <span className="inline-block rounded-md bg-blue-50 border border-blue-100 px-2 py-0.5 text-xs text-blue-700 font-medium">
+                            Next: {fb.nextStep}
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        disabled={pending}
+                        onClick={() => handleDelete(fb.id)}
+                        className="shrink-0 rounded-md p-1 text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
                   </div>
-                  {fb.interviewerName && (
-                    <p className="text-xs text-slate-500">Interviewer: {fb.interviewerName}</p>
-                  )}
-                  {fb.notes && (
-                    <p className="text-sm text-slate-600 leading-relaxed">{fb.notes}</p>
-                  )}
-                  {fb.nextStep && (
-                    <span className="inline-block rounded-md bg-blue-50 border border-blue-100 px-2 py-0.5 text-xs text-blue-700 font-medium">
-                      Next: {fb.nextStep}
-                    </span>
-                  )}
-                </div>
-                <button
-                  disabled={pending}
-                  onClick={() => handleDelete(fb.id)}
-                  className="shrink-0 rounded-md p-1 text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </button>
-              </div>
+                );
+              })}
             </div>
           );
         })}
 
+        {/* ── Step 0: pick job (only when multiple active applications) ── */}
+        {step === "pick-job" && (
+          <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 space-y-3">
+            <p className="text-sm font-semibold text-blue-900">Which role?</p>
+            <div className="flex flex-col gap-2">
+              {apps.map((a) => (
+                <button
+                  key={a.id}
+                  type="button"
+                  onClick={() => { setSelectedAppId(a.id); setStep("pick-round"); }}
+                  className="rounded-lg border border-blue-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:border-blue-400 hover:bg-blue-50 transition-colors text-left"
+                >
+                  {a.jobTitle}
+                </button>
+              ))}
+            </div>
+            <Button size="sm" variant="ghost" onClick={reset} className="h-7 text-xs text-slate-500">
+              Cancel
+            </Button>
+          </div>
+        )}
+
         {/* ── Step 1: pick round ── */}
         {step === "pick-round" && (
           <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 space-y-3">
+            {/* Selected role label */}
+            {apps.length > 1 && selectedApp && (
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">{selectedApp.jobTitle}</span>
+                <button type="button" onClick={() => setStep("pick-job")} className="text-[11px] text-slate-400 hover:text-blue-600">change</button>
+              </div>
+            )}
             <p className="text-sm font-semibold text-blue-900">Which interview round?</p>
             <div className="flex flex-wrap gap-2">
-              {roundOptions.map((r) => (
+              {(selectedApp?.roundOptions ?? ["Screening", "Round 1", "Round 2", "Final"]).map((r) => (
                 <button
                   key={r}
                   type="button"
@@ -173,8 +231,16 @@ export function RoundFeedback({
         {/* ── Step 2: fill detail ── */}
         {step === "fill-detail" && (
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-3">
-            {/* Round label + change */}
-            <div className="flex items-center gap-2">
+            {/* Context breadcrumb */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {apps.length > 1 && selectedApp && (
+                <>
+                  <span className="rounded-full bg-blue-100 border border-blue-200 px-3 py-1 text-xs font-bold text-blue-800">
+                    {selectedApp.jobTitle}
+                  </span>
+                  <span className="text-slate-300">›</span>
+                </>
+              )}
               <span className="rounded-full bg-amber-100 border border-amber-200 px-3 py-1 text-xs font-bold text-amber-800">
                 {round === "__custom__" ? "Custom round" : effectiveRound}
               </span>
@@ -270,7 +336,7 @@ export function RoundFeedback({
         )}
 
         {/* Empty state */}
-        {feedbackList.length === 0 && step === "idle" && (
+        {totalFeedback === 0 && step === "idle" && (
           <p className="text-sm text-slate-400 py-1">No interview feedback yet.</p>
         )}
       </div>
