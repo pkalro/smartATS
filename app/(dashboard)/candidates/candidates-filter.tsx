@@ -37,20 +37,26 @@ const STAGE_LABELS: Record<string, string> = {
 
 function StageSelect({ applicationId, status }: { applicationId: string; status: string }) {
   const [, startT] = useTransition();
+  const colorClass = STATUS_STYLES[status] ?? "bg-slate-100 text-slate-500 border-slate-200";
   return (
-    <select
-      value={status}
-      onClick={(e) => e.stopPropagation()}
-      onChange={(e) => {
-        e.stopPropagation();
-        startT(() => updateApplicationStatus(applicationId, e.target.value as CandidateStatus));
-      }}
-      className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${STATUS_STYLES[status] ?? "bg-slate-100 text-slate-500 border-slate-200"}`}
-    >
-      {Object.entries(STAGE_LABELS).map(([v, label]) => (
-        <option key={v} value={v}>{label}</option>
-      ))}
-    </select>
+    <div className="relative inline-flex items-center shrink-0">
+      <select
+        value={status}
+        onClick={(e) => e.stopPropagation()}
+        onChange={(e) => {
+          e.stopPropagation();
+          startT(() => updateApplicationStatus(applicationId, e.target.value as CandidateStatus));
+        }}
+        className={`appearance-none h-[22px] rounded-full border pl-2 pr-5 text-[10px] font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${colorClass}`}
+      >
+        {Object.entries(STAGE_LABELS).map(([v, label]) => (
+          <option key={v} value={v}>{label}</option>
+        ))}
+      </select>
+      <svg className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-2.5 w-2.5 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </div>
   );
 }
 
@@ -254,14 +260,14 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
                         ) : (
                           <div className="flex flex-col gap-1.5">
                             {c.applications.slice(0, 2).map((a, i) => (
-                              <div key={a.jobId} className="flex items-center gap-1.5">
-                                <Link href={`/jobs/${a.jobId}`} className="text-xs text-slate-600 hover:text-blue-600 hover:underline truncate max-w-[110px]">
+                              <div key={a.jobId} className="flex items-center gap-1.5 flex-wrap">
+                                <Link href={`/jobs/${a.jobId}`} onClick={(e) => e.stopPropagation()} className="text-xs text-slate-600 hover:text-blue-600 hover:underline truncate max-w-[110px]">
                                   {a.jobTitle}
                                 </Link>
                                 {i === 0 && c.primaryApplicationId ? (
                                   <StageSelect applicationId={c.primaryApplicationId} status={a.status} />
                                 ) : (
-                                  <span className={`shrink-0 rounded-full border px-1.5 py-px text-[10px] font-semibold ${STATUS_STYLES[a.status] ?? "bg-slate-100 text-slate-500"}`}>
+                                  <span className={`inline-flex items-center h-[22px] rounded-full border px-2 text-[10px] font-semibold shrink-0 ${STATUS_STYLES[a.status] ?? "bg-slate-100 text-slate-500 border-slate-200"}`}>
                                     {a.status.charAt(0) + a.status.slice(1).toLowerCase()}
                                   </span>
                                 )}
