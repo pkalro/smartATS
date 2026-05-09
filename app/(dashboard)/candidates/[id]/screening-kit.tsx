@@ -136,15 +136,30 @@ export function ScreeningKit({
               <CardDescription>Matches and gaps vs the JD.</CardDescription>
             </CardHeader>
             <CardContent>
-              <ul className="space-y-1.5 text-sm">
-                {gapPoints.map((item, i) => (
-                  <li key={i} className="flex gap-2 leading-relaxed">
-                    <span className={`mt-0.5 shrink-0 font-bold ${item.startsWith("✓") ? "text-green-600" : item.startsWith("✗") ? "text-destructive" : "text-muted-foreground"}`}>
-                      {item.startsWith("✓") || item.startsWith("✗") ? "" : "•"}
-                    </span>
-                    <span>{item}</span>
-                  </li>
-                ))}
+              <ul className="space-y-2 text-sm">
+                {gapPoints.map((item, i) => {
+                  const isGood = item.startsWith("✓");
+                  const isBad  = item.startsWith("✗");
+                  const text   = item.replace(/^[✓✗]\s*/, "");
+                  if (isGood) return (
+                    <li key={i} className="flex items-start gap-2 rounded-lg bg-emerald-50 border border-emerald-100 px-3 py-2 leading-relaxed">
+                      <span className="mt-0.5 shrink-0 text-base leading-none">✓</span>
+                      <span className="text-emerald-900">{text}</span>
+                    </li>
+                  );
+                  if (isBad) return (
+                    <li key={i} className="flex items-start gap-2 rounded-lg bg-red-50 border border-red-100 px-3 py-2 leading-relaxed">
+                      <span className="mt-0.5 shrink-0 text-base leading-none">✗</span>
+                      <span className="text-red-900">{text}</span>
+                    </li>
+                  );
+                  return (
+                    <li key={i} className="flex items-start gap-2 rounded-lg bg-slate-50 border border-slate-100 px-3 py-2 leading-relaxed">
+                      <span className="mt-0.5 shrink-0 text-slate-400">•</span>
+                      <span className="text-slate-700">{item}</span>
+                    </li>
+                  );
+                })}
               </ul>
             </CardContent>
           </Card>

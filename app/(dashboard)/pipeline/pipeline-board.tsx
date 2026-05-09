@@ -21,13 +21,25 @@ type AppCard = {
 
 type Job = { id: string; title: string };
 
+// One card per candidate (merged across multiple jobs in same stage)
+type CandidateGroup = {
+  candidateId: string;
+  candidateName: string | null;
+  currentTitle: string | null;
+  noticePeriod: string | null;
+  currentSalary: string | null;
+  score: number | null;           // best score across all jobs
+  updatedAt: Date;
+  jobs: { applicationId: string; jobId: string; jobTitle: string }[];
+};
+
 const ACTIVE_STAGES = [
-  { status: "NEW",          label: "New",          col: "from-slate-400 to-slate-500" },
-  { status: "SCREENING",    label: "Screening",    col: "from-blue-500 to-cyan-500" },
-  { status: "SHORTLISTED",  label: "Shortlisted",  col: "from-violet-500 to-purple-500" },
-  { status: "INTERVIEWING", label: "Interviewing", col: "from-amber-500 to-orange-500" },
-  { status: "OFFER",        label: "Offer",        col: "from-orange-500 to-rose-500" },
-  { status: "HIRED",        label: "Hired",        col: "from-emerald-500 to-teal-500" },
+  { status: "NEW",          label: "New",          col: "from-slate-400 to-slate-500",    light: "bg-slate-100 text-slate-600 border-slate-200" },
+  { status: "SCREENING",    label: "Screening",    col: "from-blue-500 to-cyan-500",      light: "bg-blue-100 text-blue-700 border-blue-200" },
+  { status: "SHORTLISTED",  label: "Shortlisted",  col: "from-violet-500 to-purple-500",  light: "bg-violet-100 text-violet-700 border-violet-200" },
+  { status: "INTERVIEWING", label: "Interviewing", col: "from-amber-500 to-orange-500",   light: "bg-amber-100 text-amber-700 border-amber-200" },
+  { status: "OFFER",        label: "Offer",        col: "from-orange-500 to-rose-500",    light: "bg-orange-100 text-orange-700 border-orange-200" },
+  { status: "HIRED",        label: "Hired",        col: "from-emerald-500 to-teal-500",   light: "bg-emerald-100 text-emerald-700 border-emerald-200" },
 ];
 
 const CLOSED_STAGES = [
@@ -54,34 +66,43 @@ function ScoreChip({ score }: { score: number | null }) {
   );
 }
 
-function CandidateCard({ app }: { app: AppCard }) {
-  const days = daysSince(app.updatedAt);
-  const isStale = days >= 3 && !["HIRED", "REJECTED", "WITHDRAWN"].includes(app.status);
+function CandidateCard({ group }: { group: CandidateGroup }) {
+  const days = daysSince(group.updatedAt);
+  const isStale = days >= 3;
 
   return (
-    <Link href={`/candidates/${app.candidateId}`}
+    <Link
+      href={`/candidates/${group.candidateId}`}
       className="group block rounded-xl border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all hover:shadow-md hover:border-blue-200 hover:-translate-y-0.5"
     >
-      {/* Avatar row */}
+      {/* Avatar + name + score */}
       <div className="flex items-center gap-1.5 mb-2 min-w-0">
         <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600 text-[11px] font-bold text-white shadow-sm">
-          {(app.candidateName ?? "?").charAt(0).toUpperCase()}
+          {(group.candidateName ?? "?").charAt(0).toUpperCase()}
         </div>
         <span className="flex-1 min-w-0 font-semibold text-slate-800 leading-tight truncate text-[13px] group-hover:text-blue-700 transition-colors">
-          {app.candidateName || "Unnamed"}
+          {group.candidateName || "Unnamed"}
         </span>
-        <ScoreChip score={app.score} />
+        <ScoreChip score={group.score} />
       </div>
 
-      {app.currentTitle && (
-        <p className="text-[11px] text-slate-500 truncate mb-1">{app.currentTitle}</p>
+      {group.currentTitle && (
+        <p className="text-[11px] text-slate-500 truncate mb-1">{group.currentTitle}</p>
       )}
-      <p className="text-[10px] text-slate-400 truncate mb-2">{app.jobTitle}</p>
+
+      {/* Job tags — show all jobs this candidate is in for this stage */}
+      <div className="flex flex-wrap gap-1 mb-2">
+        {group.jobs.map((j) => (
+          <span key={j.applicationId} className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-500 truncate max-w-[120px]">
+            {j.jobTitle}
+          </span>
+        ))}
+      </div>
 
       <div className="flex items-center justify-between gap-1 text-[10px]">
         <div className="flex items-center gap-2">
-          {app.noticePeriod && <span className="text-slate-500 font-medium">{app.noticePeriod}</span>}
-          {app.currentSalary && <span className="text-slate-400">{app.currentSalary}</span>}
+          {group.noticePeriod && <span className="text-slate-500 font-medium">{group.noticePeriod}</span>}
+          {group.currentSalary && <span className="text-slate-400">{group.currentSalary}</span>}
         </div>
         <span className={isStale ? "text-amber-500 font-semibold" : "text-slate-300"}>
           {days === 0 ? "today" : `${days}d`}
@@ -91,9 +112,39 @@ function CandidateCard({ app }: { app: AppCard }) {
   );
 }
 
+/** Group flat AppCards by candidateId within a stage */
+function groupByCandidateId(cards: AppCard[]): CandidateGroup[] {
+  const map = new Map<string, CandidateGroup>();
+  for (const c of cards) {
+    const existing = map.get(c.candidateId);
+    if (existing) {
+      existing.jobs.push({ applicationId: c.id, jobId: c.jobId, jobTitle: c.jobTitle });
+      if (c.score != null && (existing.score == null || c.score > existing.score)) {
+        existing.score = c.score;
+      }
+      if (new Date(c.updatedAt) > new Date(existing.updatedAt)) {
+        existing.updatedAt = c.updatedAt;
+      }
+    } else {
+      map.set(c.candidateId, {
+        candidateId:  c.candidateId,
+        candidateName: c.candidateName,
+        currentTitle: c.currentTitle,
+        noticePeriod: c.noticePeriod,
+        currentSalary: c.currentSalary,
+        score:        c.score,
+        updatedAt:    c.updatedAt,
+        jobs:         [{ applicationId: c.id, jobId: c.jobId, jobTitle: c.jobTitle }],
+      });
+    }
+  }
+  return Array.from(map.values());
+}
+
 export function PipelineBoard({ applications, jobs }: { applications: AppCard[]; jobs: Job[] }) {
-  const [jobFilter, setJobFilter] = useState("all");
-  const [search, setSearch] = useState("");
+  const [jobFilter, setJobFilter]       = useState("all");
+  const [search, setSearch]             = useState("");
+  const [expandedCol, setExpandedCol]   = useState<string | null>(null);
 
   const filtered = useMemo(() => applications.filter((a) => {
     if (jobFilter !== "all" && a.jobId !== jobFilter) return false;
@@ -106,14 +157,22 @@ export function PipelineBoard({ applications, jobs }: { applications: AppCard[];
     return true;
   }), [applications, jobFilter, search]);
 
+  // Build per-status grouped lists
   const byStatus = useMemo(() => {
-    const map: Record<string, AppCard[]> = {};
-    for (const s of [...ACTIVE_STAGES, ...CLOSED_STAGES]) map[s.status] = [];
-    for (const a of filtered) { if (map[a.status]) map[a.status].push(a); }
-    return map;
+    const raw: Record<string, AppCard[]> = {};
+    for (const s of [...ACTIVE_STAGES, ...CLOSED_STAGES]) raw[s.status] = [];
+    for (const a of filtered) { if (raw[a.status]) raw[a.status].push(a); }
+    // Group by candidate within each stage
+    const grouped: Record<string, CandidateGroup[]> = {};
+    for (const s in raw) grouped[s] = groupByCandidateId(raw[s]);
+    return grouped;
   }, [filtered]);
 
-  const hasClosedCards = CLOSED_STAGES.some((s) => byStatus[s.status].length > 0);
+  const hasClosedCards = CLOSED_STAGES.some((s) => byStatus[s.status]?.length > 0);
+
+  function toggleCol(status: string) {
+    setExpandedCol((prev) => (prev === status ? null : status));
+  }
 
   return (
     <div className="space-y-6">
@@ -148,61 +207,94 @@ export function PipelineBoard({ applications, jobs }: { applications: AppCard[];
         </div>
       </div>
 
-      {/* Active columns — horizontal scroll on mobile, grid on desktop */}
-      <div className="overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0">
-      <div className="flex gap-3 md:grid md:grid-cols-3 lg:grid-cols-6">
+      {/* ── Stage summary bar (always visible) ── */}
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
         {ACTIVE_STAGES.map((col) => {
-          const cards = byStatus[col.status];
+          const groups  = byStatus[col.status] ?? [];
+          const isOpen  = expandedCol === col.status;
           return (
-            <div key={col.status} className="flex flex-col gap-2.5 min-w-[160px] md:min-w-0">
-              {/* Column header */}
-              <div className="flex items-center justify-between">
-                <div className={`flex items-center gap-1.5 rounded-full bg-gradient-to-r ${col.col} px-2.5 py-1 shadow-sm`}>
-                  <span className="text-[11px] font-bold text-white">{col.label}</span>
-                </div>
-                <span className="text-xs font-bold text-slate-400 tabular-nums">{cards.length}</span>
+            <button
+              key={col.status}
+              type="button"
+              onClick={() => toggleCol(col.status)}
+              className={`flex flex-col items-center gap-1.5 rounded-xl border py-3 px-2 transition-all ${
+                isOpen
+                  ? "border-blue-300 bg-blue-50 shadow-sm"
+                  : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
+              }`}
+            >
+              <div className={`flex items-center gap-1.5 rounded-full bg-gradient-to-r ${col.col} px-2.5 py-1 shadow-sm`}>
+                <span className="text-[11px] font-bold text-white">{col.label}</span>
               </div>
-
-              {/* Cards */}
-              <div className="space-y-2 min-h-[80px]">
-                {cards.length === 0 ? (
-                  <div className="rounded-xl border-2 border-dashed border-slate-100 py-5 text-center text-[11px] text-slate-300">
-                    Empty
-                  </div>
-                ) : (
-                  cards.map((a) => <CandidateCard key={a.id} app={a} />)
-                )}
-              </div>
-            </div>
+              <span className={`text-xl font-extrabold tabular-nums ${isOpen ? "text-blue-700" : "text-slate-800"}`}>
+                {groups.length}
+              </span>
+              <span className="text-[10px] text-slate-400">{isOpen ? "▲ hide" : "▼ show"}</span>
+            </button>
           );
         })}
       </div>
-      </div>
 
-      {/* Closed stages */}
+      {/* ── Expanded column ── */}
+      {expandedCol && (() => {
+        const col    = ACTIVE_STAGES.find((c) => c.status === expandedCol)!;
+        const groups = byStatus[expandedCol] ?? [];
+        return (
+          <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+            {/* Column header */}
+            <div className="flex items-center justify-between px-5 py-3 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className={`flex items-center gap-1.5 rounded-full bg-gradient-to-r ${col.col} px-3 py-1 shadow-sm`}>
+                  <span className="text-[12px] font-bold text-white">{col.label}</span>
+                </div>
+                <span className="text-sm font-bold text-slate-500 tabular-nums">
+                  {groups.length} candidate{groups.length !== 1 ? "s" : ""}
+                </span>
+              </div>
+              <button
+                onClick={() => setExpandedCol(null)}
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+              >
+                <Icon name="x" size={4} />
+              </button>
+            </div>
+
+            {/* Cards grid */}
+            {groups.length === 0 ? (
+              <div className="py-12 text-center text-sm text-slate-400">No candidates in this stage</div>
+            ) : (
+              <div className="p-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {groups.map((g) => <CandidateCard key={g.candidateId} group={g} />)}
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
+      {/* ── Closed stages ── */}
       {hasClosedCards && (
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-slate-400">Not progressing</p>
           <div className="grid gap-3 md:grid-cols-2">
             {CLOSED_STAGES.map((col) => {
-              const cards = byStatus[col.status];
-              if (cards.length === 0) return null;
+              const groups = byStatus[col.status] ?? [];
+              if (groups.length === 0) return null;
               return (
                 <div key={col.status}>
                   <div className="flex items-center gap-2 mb-2">
                     <span className={`rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${STATUS_STYLES[col.status] ?? "bg-slate-100 text-slate-400"}`}>
                       {col.label}
                     </span>
-                    <span className="text-xs text-slate-400">{cards.length}</span>
+                    <span className="text-xs text-slate-400">{groups.length}</span>
                   </div>
                   <div className="space-y-1">
-                    {cards.map((a) => (
-                      <Link key={a.id} href={`/candidates/${a.candidateId}`}
+                    {groups.map((g) => (
+                      <Link key={g.candidateId} href={`/candidates/${g.candidateId}`}
                         className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-colors line-through"
                       >
-                        <span className="truncate">{a.candidateName || "Unnamed"}</span>
+                        <span className="truncate">{g.candidateName || "Unnamed"}</span>
                         <span className="text-slate-300">·</span>
-                        <span className="truncate text-xs">{a.jobTitle}</span>
+                        <span className="truncate text-xs">{g.jobs.map((j) => j.jobTitle).join(", ")}</span>
                       </Link>
                     ))}
                   </div>

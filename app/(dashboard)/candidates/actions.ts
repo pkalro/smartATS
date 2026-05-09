@@ -212,8 +212,14 @@ export async function addCandidateToJob(candidateId: string, jobId: string) {
   const userId = session.user.id;
 
   const [candidate, job] = await Promise.all([
-    prisma.candidate.findFirst({ where: { id: candidateId, userId } }),
-    prisma.job.findFirst({ where: { id: jobId, userId } }),
+    prisma.candidate.findFirst({
+      where: { id: candidateId, userId },
+      select: { id: true, rawSource: true, sourceType: true },
+    }),
+    prisma.job.findFirst({
+      where: { id: jobId, userId },
+      select: { id: true, title: true, rawJD: true },
+    }),
   ]);
   if (!candidate || !job) return { error: "Not found." };
 
@@ -222,9 +228,32 @@ export async function addCandidateToJob(candidateId: string, jobId: string) {
   });
   if (existing) return { error: "Already applied to this job." };
 
-  await prisma.candidateJobApplication.create({
-    data: { candidateId, jobId, status: "NEW" },
+  const app = await prisma.candidateJobApplication.create({
+    data: { candidateId, jobId, status: "SCREENING" },
   });
+
+  // Auto-score immediately if we have a resume and JD
+  if (candidate.rawSource && job.rawJD) {
+    try {
+      await assertUnderCap(userId);
+      const result = await screenCandidate({
+        source: candidate.rawSource,
+        sourceType: (candidate.sourceType as "resume" | "notes") ?? "notes",
+        jdText: job.rawJD,
+        jobTitle: job.title,
+      });
+      await incrementUsage(userId);
+      await prisma.candidateJobApplication.update({
+        where: { id: app.id },
+        data: {
+          score: Math.round(result.score),
+          scoreRationale: result.scoreRationale,
+        },
+      });
+    } catch {
+      // scoring failed silently — application still created
+    }
+  }
 
   revalidatePath(`/candidates/${candidateId}`);
   return { ok: true as const };
