@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy, Check } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 
 export function SheetRowCopy({ row }: { row: string }) {
   const [copied, setCopied] = useState(false);
@@ -16,7 +16,7 @@ export function SheetRowCopy({ row }: { row: string }) {
         setTimeout(() => setCopied(false), 1500);
       }}
     >
-      {copied ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5" />}
+      {copied ? <Icon name="check" size={3.5} className="text-green-600" /> : <Icon name="copy" size={3.5} />}
     </Button>
   );
 }

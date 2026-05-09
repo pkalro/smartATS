@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, Kanban } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import { STATUS_STYLES } from "@/lib/status-styles";
 
 type AppCard = {
@@ -110,7 +110,7 @@ export function PipelineBoard({ applications, jobs }: { applications: AppCard[];
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 shadow-md shadow-amber-200">
-            <Kanban className="h-5 w-5 text-white" />
+            <Icon name="kanban" size={5} className="text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Pipeline</h1>
@@ -123,7 +123,7 @@ export function PipelineBoard({ applications, jobs }: { applications: AppCard[];
 
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+            <Icon name="search" size={3.5} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…"
               className="h-8 w-44 rounded-lg border border-slate-200 bg-white pl-8 pr-3 text-sm text-slate-700 placeholder:text-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />

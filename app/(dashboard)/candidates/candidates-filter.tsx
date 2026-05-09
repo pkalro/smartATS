@@ -3,7 +3,7 @@
 import { useState, useMemo, useTransition } from "react";
 import Link from "next/link";
 import { parseSkills } from "@/lib/skills";
-import { X, Download, Search, ChevronRight } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import { STATUS_STYLES } from "@/lib/status-styles";
 import { updateApplicationStatus } from "./actions";
 import type { CandidateStatus } from "@/lib/types";
@@ -98,7 +98,7 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
       {/* Filter bar */}
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 px-4 py-3">
         <div className="relative w-full sm:w-auto">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+          <Icon name="search" size={3.5} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -141,7 +141,7 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
           <button type="button" onClick={() => { setStatusFilter([]); setSourceFilter([]); setSearch(""); }}
             className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-700 transition-colors"
           >
-            <X className="h-3 w-3" /> Clear
+            <Icon name="x" size={3} /> Clear
           </button>
         )}
 
@@ -149,7 +149,7 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
           <span className="text-xs text-slate-400 font-medium">{filtered.length} of {candidates.length}</span>
           {filtered.length > 0 && (
             <a href="/api/candidates/export.csv" className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-700 transition-colors">
-              <Download className="h-3.5 w-3.5" /> Export
+              <Icon name="download" size={3.5} /> Export
             </a>
           )}
         </div>
@@ -198,7 +198,7 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
                     <span className={`text-[11px] font-medium ${isStale ? "text-amber-500" : "text-slate-400"}`}>
                       {days === 0 ? "today" : `${days}d`}
                     </span>
-                    <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
+                    <Icon name="chevron-right" size={3.5} className="text-slate-300" />
                   </div>
                 </Link>
               );
@@ -285,7 +285,7 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
                       </td>
                       <td className="pr-4">
                         <Link href={`/candidates/${c.id}`} className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-300 hover:text-blue-600 hover:bg-blue-50 opacity-0 group-hover:opacity-100 transition-all">
-                          <ChevronRight className="h-3.5 w-3.5" />
+                          <Icon name="chevron-right" size={3.5} />
                         </Link>
                       </td>
                     </tr>

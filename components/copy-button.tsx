@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, Copy } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 
 export function CopyButton({
   text,
@@ -23,7 +23,7 @@ export function CopyButton({
         setTimeout(() => setCopied(false), 1500);
       }}
     >
-      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+      {copied ? <Icon name="check" size={4} /> : <Icon name="copy" size={4} />}
       {copied ? "Copied" : label}
     </Button>
   );

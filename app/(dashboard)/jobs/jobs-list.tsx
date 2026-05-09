@@ -3,7 +3,8 @@
 import { useState, useMemo, useTransition } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Power, X, Users, Search, ChevronRight } from "lucide-react";
+import { Power } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import { toggleJobStatus } from "./actions";
 
 type Job = {
@@ -48,7 +49,7 @@ export function JobsList({ jobs }: { jobs: Job[] }) {
       {/* Filter / search bar */}
       <div className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
         <div className="relative flex-1 min-w-40">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+          <Icon name="search" size={3.5} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -80,7 +81,7 @@ export function JobsList({ jobs }: { jobs: Job[] }) {
             onClick={() => { setStatusFilter([]); setSearch(""); }}
             className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-700 transition-colors"
           >
-            <X className="h-3 w-3" /> Clear
+            <Icon name="x" size={3} /> Clear
           </button>
         )}
         <span className="ml-auto text-xs text-slate-400 font-medium">{filtered.length} of {jobs.length}</span>
@@ -110,7 +111,7 @@ export function JobsList({ jobs }: { jobs: Job[] }) {
                     </span>
                   </div>
                   <div className="mt-1 flex items-center gap-4 text-xs text-slate-400">
-                    <span className="flex items-center gap-1"><Users className="h-3 w-3" />{j.candidateCount} candidate{j.candidateCount !== 1 ? "s" : ""}</span>
+                    <span className="flex items-center gap-1"><Icon name="users" size={3} />{j.candidateCount} candidate{j.candidateCount !== 1 ? "s" : ""}</span>
                     {j.industry && <span>{j.industry}</span>}
                     <span>{new Date(j.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span>
                   </div>
@@ -128,7 +129,7 @@ export function JobsList({ jobs }: { jobs: Job[] }) {
                     <Power className={`h-3.5 w-3.5 ${j.status === "ACTIVE" ? "text-emerald-500" : ""}`} />
                   </Button>
                   <Link href={`/jobs/${j.id}`} className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors">
-                    <ChevronRight className="h-3.5 w-3.5" />
+                    <Icon name="chevron-right" size={3.5} />
                   </Link>
                 </div>
               </div>

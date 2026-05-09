@@ -3,7 +3,8 @@
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { generateMarketIntelligenceAction } from "../actions";
-import { TrendingUp, AlertTriangle, Loader2, RefreshCw, Users } from "lucide-react";
+import { AlertTriangle, RefreshCw } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import type { MarketIntelligence } from "@/lib/ai/market";
 
 const SCARCITY_CONFIG = {
@@ -119,10 +120,10 @@ export function MarketIntelligencePanel({
         </div>
         <Button size="sm" variant="outline" disabled={pending} onClick={generate}>
           {pending
-            ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Analysing…</>
+            ? <><Icon name="loader" size={3.5} className="animate-spin" /> Analysing…</>
             : intel
               ? <><RefreshCw className="h-3.5 w-3.5" /> Refresh</>
-              : <><TrendingUp className="h-3.5 w-3.5" /> Generate</>}
+              : <><Icon name="trending-up" size={3.5} /> Generate</>}
         </Button>
       </div>
 
@@ -151,7 +152,7 @@ export function MarketIntelligencePanel({
               return (
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <Icon name="users" size={4} className="text-muted-foreground" />
                     <span className={`rounded-full border px-3 py-0.5 text-sm font-medium ${cfg.color}`}>
                       {cfg.label}
                     </span>

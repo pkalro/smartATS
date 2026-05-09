@@ -3,11 +3,8 @@ import { prisma } from "@/lib/db";
 import { getUsage } from "@/lib/usage";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  FileText, Users, Sparkles, AlertCircle,
-  Clock, UserCheck, Plus, Upload, LayoutDashboard,
-  TrendingUp, ArrowRight,
-} from "lucide-react";
+import { AlertCircle, Clock, UserCheck, ArrowRight } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 
 export default async function OverviewPage() {
   const session = await auth();
@@ -89,7 +86,7 @@ export default async function OverviewPage() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 shadow-md shadow-blue-200">
-            <LayoutDashboard className="h-5 w-5 text-white" />
+            <Icon name="layout-dashboard" size={5} className="text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
@@ -100,23 +97,23 @@ export default async function OverviewPage() {
         </div>
         <div className="flex gap-2">
           <Button asChild size="sm" variant="outline" className="rounded-lg border-slate-200 text-slate-600 hover:bg-slate-50">
-            <Link href="/candidates/bulk"><Upload className="h-3.5 w-3.5" />Bulk upload</Link>
+            <Link href="/candidates/bulk"><Icon name="upload" size={3.5} />Bulk upload</Link>
           </Button>
           <Button asChild size="sm" className="rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 border-0 text-white shadow-sm">
-            <Link href="/candidates/new"><Plus className="h-3.5 w-3.5" />Add candidate</Link>
+            <Link href="/candidates/new"><Icon name="plus" size={3.5} />Add candidate</Link>
           </Button>
         </div>
       </div>
 
       {/* ── Stats strip ── */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Active jobs" value={jobCount} icon={<FileText className="h-5 w-5" />} gradient="from-blue-500 to-cyan-500" href="/jobs" />
-        <StatCard label="Candidates" value={candidateCount} icon={<Users className="h-5 w-5" />} gradient="from-violet-500 to-purple-500" href="/candidates" />
+        <StatCard label="Active jobs" value={jobCount} icon={<Icon name="briefcase" size={5} />} gradient="from-blue-500 to-cyan-500" href="/jobs" />
+        <StatCard label="Candidates" value={candidateCount} icon={<Icon name="users" size={5} />} gradient="from-violet-500 to-purple-500" href="/candidates" />
         <StatCard label="Shortlisted" value={shortlistedCount} icon={<UserCheck className="h-5 w-5" />} gradient="from-amber-500 to-orange-500" href="/pipeline" />
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-sm">
-              <Sparkles className="h-4 w-4 text-white" />
+              <Icon name="sparkles" size={4} className="text-white" />
             </div>
             <span className="text-xs font-medium text-slate-400">AI quota</span>
           </div>
@@ -141,7 +138,7 @@ export default async function OverviewPage() {
           <p className="mt-1 text-sm text-slate-500">No pending actions right now. Great work.</p>
           <div className="mt-6 flex justify-center gap-3">
             <Button asChild size="sm" className="rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 border-0 text-white hover:from-blue-700 hover:to-violet-700">
-              <Link href="/candidates/new"><Plus className="h-3.5 w-3.5" />Add candidate</Link>
+              <Link href="/candidates/new"><Icon name="plus" size={3.5} />Add candidate</Link>
             </Button>
             <Button asChild size="sm" variant="outline" className="rounded-lg border-slate-200">
               <Link href="/pipeline">View pipeline</Link>
@@ -152,7 +149,7 @@ export default async function OverviewPage() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {/* Needs review — NEW or SCREENING, most recent first */}
           {toReview.length > 0 && (
-            <QueueCard title="Needs review" icon={<FileText className="h-4 w-4" />} count={toReview.length} accent="blue"
+            <QueueCard title="Needs review" icon={<Icon name="briefcase" size={4} />} count={toReview.length} accent="blue"
               footer={toReview.length >= 8 ? { label: "View all screening", href: "/candidates?status=SCREENING" } : undefined}>
               {toReview.map((a) => (
                 <QueueRow key={a.id} href={`/candidates/${a.candidate.id}`}
@@ -185,7 +182,7 @@ export default async function OverviewPage() {
           )}
           {/* Offer stage — needs closing */}
           {offerStage.length > 0 && (
-            <QueueCard title="Offer out — close now" icon={<Sparkles className="h-4 w-4" />} count={offerStage.length} accent="emerald">
+            <QueueCard title="Offer out — close now" icon={<Icon name="sparkles" size={4} />} count={offerStage.length} accent="emerald">
               {offerStage.map((a) => (
                 <QueueRow key={a.id} href={`/candidates/${a.candidate.id}`}
                   name={a.candidate.name ?? "Unnamed"}
@@ -210,9 +207,9 @@ export default async function OverviewPage() {
       <div>
         <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-3">Quick actions</h2>
         <div className="grid gap-4 md:grid-cols-3">
-          <ActionCard icon={<Users className="h-5 w-5" />} gradient="from-blue-500 to-cyan-500" title="Screen a candidate" body="Upload a resume or paste call notes." href="/candidates/new" cta="Add candidate" />
-          <ActionCard icon={<Upload className="h-5 w-5" />} gradient="from-violet-500 to-purple-500" title="Bulk upload resumes" body="Drop a folder of CVs — AI screens them all." href="/candidates/bulk" cta="Bulk upload" />
-          <ActionCard icon={<TrendingUp className="h-5 w-5" />} gradient="from-amber-500 to-orange-500" title="Open pipeline" body="Move candidates through interview stages." href="/pipeline" cta="View pipeline" />
+          <ActionCard icon={<Icon name="users" size={5} />} gradient="from-blue-500 to-cyan-500" title="Screen a candidate" body="Upload a resume or paste call notes." href="/candidates/new" cta="Add candidate" />
+          <ActionCard icon={<Icon name="upload" size={5} />} gradient="from-violet-500 to-purple-500" title="Bulk upload resumes" body="Drop a folder of CVs — AI screens them all." href="/candidates/bulk" cta="Bulk upload" />
+          <ActionCard icon={<Icon name="trending-up" size={5} />} gradient="from-amber-500 to-orange-500" title="Open pipeline" body="Move candidates through interview stages." href="/pipeline" cta="View pipeline" />
         </div>
       </div>
     </div>

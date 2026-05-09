@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Star } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 
 export type AppScoreEvent = {
   score: number | null;
@@ -30,7 +30,7 @@ export function HeaderScoreBadge({ initial }: { initial: number | null }) {
       score >= 50 ? "bg-amber-100 text-amber-700" :
       "bg-red-100 text-red-600"
     }`}>
-      <Star className="h-2.5 w-2.5" />{score}
+      <Icon name="star" size={3} />{score}
     </span>
   );
 }

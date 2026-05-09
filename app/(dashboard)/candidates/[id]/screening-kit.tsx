@@ -4,7 +4,8 @@ import { useState, useTransition, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CopyButton } from "@/components/copy-button";
-import { Sparkles, Loader2, MessageSquare, Mail } from "lucide-react";
+import { MessageSquare } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import { generateKit } from "./screening-actions";
 import type { AppScoreEvent } from "./header-score-badge";
 
@@ -100,9 +101,9 @@ export function ScreeningKit({
           title={!effectiveHasJob ? "Select a job in the Pipeline tab first" : undefined}
         >
           {pending ? (
-            <><Loader2 className="h-4 w-4 animate-spin" /> Generating…</>
+            <><Icon name="loader" size={4} className="animate-spin" /> Generating…</>
           ) : (
-            <><Sparkles className="h-4 w-4" /> {hasKit ? "Regenerate kit" : "Generate kit"}</>
+            <><Icon name="sparkles" size={4} /> {hasKit ? "Regenerate kit" : "Generate kit"}</>
           )}
         </Button>
       </div>
@@ -184,7 +185,7 @@ export function ScreeningKit({
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-sm">
-                  <Mail className="h-4 w-4" /> Process email
+                  <Icon name="mail" size={4} /> Process email
                 </CardTitle>
                 <CardDescription>Email explaining the interview process.</CardDescription>
               </CardHeader>

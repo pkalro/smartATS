@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Mail, Phone, MessageSquare, MoreHorizontal, Trash2, ArrowUpRight, ArrowDownLeft, ChevronDown, ChevronUp } from "lucide-react";
+import { Phone, MessageSquare, MoreHorizontal, Trash2, ArrowUpRight, ArrowDownLeft, ChevronUp } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import { logCommunication, deleteCommunication } from "./communication-actions";
 
 type Comm = {
@@ -18,7 +19,7 @@ type Comm = {
 type Application = { id: string; jobTitle: string };
 
 const CHANNEL_ICON: Record<string, React.ReactNode> = {
-  EMAIL:    <Mail className="h-3.5 w-3.5" />,
+  EMAIL:    <Icon name="mail" size={3.5} />,
   WHATSAPP: <MessageSquare className="h-3.5 w-3.5" />,
   CALL:     <Phone className="h-3.5 w-3.5" />,
   OTHER:    <MoreHorizontal className="h-3.5 w-3.5" />,
@@ -87,7 +88,7 @@ export function Communications({
             <span className="ml-1 font-normal text-muted-foreground">({communications.length})</span>
           )}
         </span>
-        {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+        {open ? <ChevronUp className="h-4 w-4" /> : <Icon name="chevron-down" size={4} />}
       </button>
 
       {open && (
@@ -229,7 +230,7 @@ export function Communications({
             </div>
           ) : (
             <Button size="sm" variant="outline" onClick={() => setAdding(true)}>
-              <Plus className="h-3.5 w-3.5" /> Log touchpoint
+              <Icon name="plus" size={3.5} /> Log touchpoint
             </Button>
           )}
         </>

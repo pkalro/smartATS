@@ -1,17 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { Settings2, Search, Users, TrendingUp } from "lucide-react";
+import { Settings2 } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 
-// Details tab first — job setup context is always the starting point
 const TABS = [
-  { id: "details",    label: "Details",    icon: Settings2   },
-  { id: "sourcing",   label: "Sourcing",   icon: Search      },
-  { id: "candidates", label: "Candidates", icon: Users       },
-  { id: "market",     label: "Market",     icon: TrendingUp  },
+  { id: "details",    label: "Details"    },
+  { id: "sourcing",   label: "Sourcing"   },
+  { id: "candidates", label: "Candidates" },
+  { id: "market",     label: "Market"     },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
+
+function TabIcon({ id }: { id: TabId }) {
+  if (id === "details")    return <Settings2 className="h-4 w-4" />;
+  if (id === "sourcing")   return <Icon name="search" size={4} />;
+  if (id === "candidates") return <Icon name="users" size={4} />;
+  if (id === "market")     return <Icon name="trending-up" size={4} />;
+  return null;
+}
 
 export function JobTabs({
   defaultTab = "details",
@@ -34,7 +42,7 @@ export function JobTabs({
       {/* Tab bar */}
       <div className="sticky top-[calc(3.5rem+49px)] md:top-[49px] z-20 -mx-4 md:-mx-8 bg-white/95 backdrop-blur border-b border-slate-200 px-4 md:px-8 shadow-sm shadow-slate-900/[0.03]">
         <nav className="flex overflow-x-auto scrollbar-none" role="tablist">
-          {TABS.map(({ id, label, icon: Icon }) => (
+          {TABS.map(({ id, label }) => (
             <button
               key={id}
               role="tab"
@@ -46,7 +54,7 @@ export function JobTabs({
                   : "border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300"
               }`}
             >
-              <Icon className="h-4 w-4" />
+              <TabIcon id={id} />
               {label}
             </button>
           ))}

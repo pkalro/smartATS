@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { CopyButton } from "@/components/copy-button";
-import { Sparkles, Loader2, Calendar, ExternalLink } from "lucide-react";
+import { Calendar, ExternalLink } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import { saveBookingLink, generateSchedulingEmail } from "./coordinator-actions";
 
 type Recruiter = {
@@ -88,7 +89,7 @@ export function Coordinator({
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
             <Button type="submit" disabled={pending}>
-              {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+              {pending ? <Icon name="loader" size={4} className="animate-spin" /> : null}
               Save link
             </Button>
           </form>
@@ -122,11 +123,11 @@ export function Coordinator({
             >
               {pending ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" /> Drafting…
+                  <Icon name="loader" size={4} className="animate-spin" /> Drafting…
                 </>
               ) : (
                 <>
-                  <Sparkles className="h-4 w-4" /> Generate email draft
+                  <Icon name="sparkles" size={4} /> Generate email draft
                 </>
               )}
             </Button>

@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { CopyButton } from "@/components/copy-button";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import { generateLinkedInPostAction } from "../actions";
 
 const POST_TYPES = [
@@ -54,9 +54,9 @@ export function GenerateJD({ jobId, initialJD }: { jobId: string; initialJD: str
           }}
         >
           {pending ? (
-            <><Loader2 className="h-4 w-4 animate-spin" /> Generating…</>
+            <><Icon name="loader" size={4} className="animate-spin" /> Generating…</>
           ) : (
-            <><Sparkles className="h-4 w-4" /> {post ? "Regenerate" : "Generate post"}</>
+            <><Icon name="sparkles" size={4} /> {post ? "Regenerate" : "Generate post"}</>
           )}
         </Button>
       </div>

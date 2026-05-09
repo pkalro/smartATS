@@ -2,10 +2,7 @@ import { auth, signOut } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
-import {
-  Sparkles, FileText, Users, Kanban,
-  BarChart2, LogOut, Settings, LayoutDashboard,
-} from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import { UsageBannerAsync } from "@/components/usage-banner-async";
 
 export default async function DashboardLayout({
@@ -38,7 +35,7 @@ export default async function DashboardLayout({
         {/* Logo */}
         <div className="flex h-16 items-center gap-3 px-5 border-b border-slate-100">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 shadow-md shadow-blue-200">
-            <Sparkles className="h-4 w-4 text-white" />
+            <Icon name="sparkles" size={4} className="text-white" />
           </div>
           <span className="font-bold text-slate-900 text-base tracking-tight">Smart ATS</span>
         </div>
@@ -46,14 +43,14 @@ export default async function DashboardLayout({
         {/* Nav */}
         <nav className="flex-1 space-y-0.5 p-3 pt-4">
           <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">Workspace</p>
-          <NavItem href="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>Dashboard</NavItem>
-          <NavItem href="/jobs"      icon={<FileText className="h-4 w-4" />}>Jobs</NavItem>
-          <NavItem href="/candidates" icon={<Users className="h-4 w-4" />}>Candidates</NavItem>
-          <NavItem href="/pipeline"  icon={<Kanban className="h-4 w-4" />}>Pipeline</NavItem>
-          <NavItem href="/reports"   icon={<BarChart2 className="h-4 w-4" />}>Reports</NavItem>
+          <NavItem href="/dashboard" icon={<Icon name="layout-dashboard" size={4} />}>Dashboard</NavItem>
+          <NavItem href="/jobs"      icon={<Icon name="briefcase" size={4} />}>Jobs</NavItem>
+          <NavItem href="/candidates" icon={<Icon name="users" size={4} />}>Candidates</NavItem>
+          <NavItem href="/pipeline"  icon={<Icon name="kanban" size={4} />}>Pipeline</NavItem>
+          <NavItem href="/reports"   icon={<Icon name="bar-chart" size={4} />}>Reports</NavItem>
 
           <p className="px-3 pb-2 pt-5 text-[10px] font-bold uppercase tracking-widest text-slate-400">Account</p>
-          <NavItem href="/settings"  icon={<Settings className="h-4 w-4" />}>Settings</NavItem>
+          <NavItem href="/settings"  icon={<Icon name="settings" size={4} />}>Settings</NavItem>
         </nav>
 
         {/* User footer */}
@@ -70,7 +67,7 @@ export default async function DashboardLayout({
                 title="Sign out"
                 className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-200 hover:text-slate-700 transition-colors"
               >
-                <LogOut className="h-3.5 w-3.5" />
+                <Icon name="log-out" size={3.5} />
               </button>
             </form>
           </div>
@@ -84,17 +81,17 @@ export default async function DashboardLayout({
         <header className="flex md:hidden items-center justify-between px-4 h-14 bg-white border-b border-slate-200 sticky top-0 z-40 shrink-0">
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-violet-600">
-              <Sparkles className="h-3.5 w-3.5 text-white" />
+              <Icon name="sparkles" size={3.5} className="text-white" />
             </div>
             <span className="font-bold text-slate-900 text-sm tracking-tight">Smart ATS</span>
           </div>
           <div className="flex items-center gap-1">
             <Link href="/settings" className="rounded-lg p-2 text-slate-400 hover:bg-slate-100">
-              <Settings className="h-4 w-4" />
+              <Icon name="settings" size={4} />
             </Link>
             <form action={async () => { "use server"; await signOut({ redirectTo: "/" }); }}>
               <button type="submit" title="Sign out" className="rounded-lg p-2 text-slate-400 hover:bg-slate-100">
-                <LogOut className="h-4 w-4" />
+                <Icon name="log-out" size={4} />
               </button>
             </form>
             {avatar}
@@ -113,11 +110,11 @@ export default async function DashboardLayout({
 
       {/* ── Mobile bottom nav ── */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-slate-200 flex items-center justify-around px-1 h-16 safe-bottom">
-        <MobileNavItem href="/dashboard" icon={<LayoutDashboard className="h-5 w-5" />} label="Home" />
-        <MobileNavItem href="/jobs"      icon={<FileText className="h-5 w-5" />}        label="Jobs" />
-        <MobileNavItem href="/candidates" icon={<Users className="h-5 w-5" />}          label="People" />
-        <MobileNavItem href="/pipeline"  icon={<Kanban className="h-5 w-5" />}          label="Pipeline" />
-        <MobileNavItem href="/reports"   icon={<BarChart2 className="h-5 w-5" />}       label="Reports" />
+        <MobileNavItem href="/dashboard"  icon={<Icon name="layout-dashboard" size={5} />} label="Home" />
+        <MobileNavItem href="/jobs"       icon={<Icon name="briefcase" size={5} />}       label="Jobs" />
+        <MobileNavItem href="/candidates" icon={<Icon name="users" size={5} />}           label="People" />
+        <MobileNavItem href="/pipeline"   icon={<Icon name="kanban" size={5} />}          label="Pipeline" />
+        <MobileNavItem href="/reports"    icon={<Icon name="bar-chart" size={5} />}       label="Reports" />
       </nav>
     </div>
   );

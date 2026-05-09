@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Pencil, Check, X } from "lucide-react";
+import { Pencil } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import { Button } from "@/components/ui/button";
 import { updateCandidateField } from "./profile-actions";
 
@@ -53,10 +54,10 @@ export function EditableInfoRow({
             />
             <Button size="sm" disabled={pending} onClick={save}
               className="h-7 w-7 p-0 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white border-0 shadow-sm">
-              <Check className="h-3.5 w-3.5" />
+              <Icon name="check" size={3.5} />
             </Button>
             <Button size="sm" variant="ghost" onClick={cancel} className="h-7 w-7 p-0 rounded-lg">
-              <X className="h-3.5 w-3.5" />
+              <Icon name="x" size={3.5} />
             </Button>
           </div>
         ) : (

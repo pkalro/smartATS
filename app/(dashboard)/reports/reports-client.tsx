@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ExportCsvButton, CopyTsvButton } from "./export-csv";
 import type { ExportRow } from "./export-csv";
 import { generateManagerPulseAction } from "./reports-actions";
-import { BarChart3, Download, Sparkles, Copy, Check, Users, UserCheck, TrendingUp, Star } from "lucide-react";
+import { UserCheck } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 
 export interface FunnelStage { status: string; count: number }
 export interface JobBreakdown { jobId: string; title: string; status: string; counts: Record<string, number> }
@@ -43,10 +44,10 @@ function OverviewTab({ totalCandidates, activeInPipeline, hired, avgScore, funne
   const grandTotal = Object.values(totalsRow).reduce((a, b) => a + b, 0);
 
   const stats = [
-    { label: "Total Screened", value: totalCandidates, icon: <Users className="h-5 w-5" />, gradient: "from-blue-500 to-cyan-500" },
-    { label: "Active in Pipeline", value: activeInPipeline, icon: <TrendingUp className="h-5 w-5" />, gradient: "from-violet-500 to-purple-500" },
+    { label: "Total Screened", value: totalCandidates, icon: <Icon name="users" size={5} />, gradient: "from-blue-500 to-cyan-500" },
+    { label: "Active in Pipeline", value: activeInPipeline, icon: <Icon name="trending-up" size={5} />, gradient: "from-violet-500 to-purple-500" },
     { label: "Hired", value: hired, icon: <UserCheck className="h-5 w-5" />, gradient: "from-emerald-500 to-teal-500" },
-    { label: "Avg Match Score", value: avgScore > 0 ? avgScore : "—", icon: <Star className="h-5 w-5" />, gradient: "from-amber-500 to-orange-500" },
+    { label: "Avg Match Score", value: avgScore > 0 ? avgScore : "—", icon: <Icon name="star" size={5} />, gradient: "from-amber-500 to-orange-500" },
   ];
 
   return (
@@ -254,7 +255,7 @@ function ManagerPulseTab({ jobs }: { jobs: { id: string; title: string }[] }) {
           <Button onClick={handleGenerate} disabled={isPending}
             className="rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 border-0 text-white shadow-sm"
           >
-            <Sparkles className="h-3.5 w-3.5" />
+            <Icon name="sparkles" size={3.5} />
             {isPending ? "Generating…" : "Generate pulse email"}
           </Button>
         </div>
@@ -266,7 +267,7 @@ function ManagerPulseTab({ jobs }: { jobs: { id: string; title: string }[] }) {
           <div className="flex items-center justify-between">
             <h3 className="font-bold text-slate-900">Generated email</h3>
             <Button variant="outline" size="sm" onClick={handleCopy} className="rounded-lg border-slate-200 text-sm gap-1.5">
-              {copied ? <><Check className="h-3.5 w-3.5 text-emerald-600" />Copied!</> : <><Copy className="h-3.5 w-3.5" />Copy</>}
+              {copied ? <><Icon name="check" size={3.5} className="text-emerald-600" />Copied!</> : <><Icon name="copy" size={3.5} />Copy</>}
             </Button>
           </div>
           <textarea
@@ -286,9 +287,9 @@ export function ReportsClient(props: ReportsClientProps) {
   const [activeTab, setActiveTab] = useState<Tab>("overview");
 
   const tabs: { key: Tab; label: string; icon: React.ReactNode }[] = [
-    { key: "overview", label: "Overview", icon: <BarChart3 className="h-4 w-4" /> },
-    { key: "export",   label: "Export",   icon: <Download className="h-4 w-4" /> },
-    { key: "pulse",    label: "Manager Pulse", icon: <Sparkles className="h-4 w-4" /> },
+    { key: "overview", label: "Overview", icon: <Icon name="bar-chart" size={4} /> },
+    { key: "export",   label: "Export",   icon: <Icon name="download" size={4} /> },
+    { key: "pulse",    label: "Manager Pulse", icon: <Icon name="sparkles" size={4} /> },
   ];
 
   return (
@@ -296,7 +297,7 @@ export function ReportsClient(props: ReportsClientProps) {
       {/* Page header */}
       <div className="flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-md shadow-emerald-200">
-          <BarChart3 className="h-5 w-5 text-white" />
+          <Icon name="bar-chart" size={5} className="text-white" />
         </div>
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Reports</h1>

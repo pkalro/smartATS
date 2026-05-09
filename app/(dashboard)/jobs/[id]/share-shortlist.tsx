@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
-import { Share2, Copy, Check, ExternalLink, Trash2 } from "lucide-react";
+import { Share2, ExternalLink, Trash2 } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import { createShareLink, revokeShareLink } from "./share-actions";
 
 type ShareLink = {
@@ -78,7 +79,7 @@ export function ShareShortlist({
                   {link._count.feedback} response{link._count.feedback !== 1 ? "s" : ""}
                 </span>
                 <Button size="sm" variant="ghost" onClick={() => copy(link.token)} className="shrink-0">
-                  {copied === link.token ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copied === link.token ? <Icon name="check" size={3.5} className="text-green-500" /> : <Icon name="copy" size={3.5} />}
                 </Button>
                 <a href={url} target="_blank" rel="noreferrer">
                   <Button size="sm" variant="ghost" className="shrink-0">

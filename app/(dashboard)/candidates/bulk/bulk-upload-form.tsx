@@ -2,7 +2,8 @@
 
 import { useState, useRef, useTransition, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Upload, FileText, CheckCircle2, XCircle, Loader2, AlertCircle, Play } from "lucide-react";
+import { CheckCircle2, XCircle, AlertCircle, Play } from "lucide-react";
+import { Icon } from "@/components/icons/icon";
 import { startBulkUpload, getBulkJob, triggerBulkAnalysis } from "./bulk-actions";
 import Link from "next/link";
 
@@ -28,7 +29,7 @@ type BulkJob = {
 const ITEM_ICON: Record<ItemStatus, React.ReactNode> = {
   PENDING:      <div className="h-4 w-4 rounded-full border-2 border-slate-300" />,
   QUEUED:       <div className="h-4 w-4 rounded-full border-2 border-blue-300 bg-blue-50" />,
-  PROCESSING:   <Loader2 className="h-4 w-4 animate-spin text-blue-500" />,
+  PROCESSING:   <Icon name="loader" size={4} className="animate-spin text-blue-500" />,
   DONE:         <CheckCircle2 className="h-4 w-4 text-emerald-500" />,
   FAILED:       <XCircle className="h-4 w-4 text-red-500" />,
   SKIPPED_QUOTA:<AlertCircle className="h-4 w-4 text-amber-500" />,
@@ -158,7 +159,7 @@ export function BulkUploadForm({ jobs }: { jobs: Job[] }) {
           }`}
         >
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 shadow-md">
-            <Upload className="h-7 w-7 text-white" />
+            <Icon name="upload" size={7} className="text-white" />
           </div>
           <div className="text-center">
             <p className="font-bold text-slate-800">Drop resumes here or click to browse</p>
@@ -179,7 +180,7 @@ export function BulkUploadForm({ jobs }: { jobs: Job[] }) {
             <div className="divide-y divide-slate-50 max-h-64 overflow-y-auto">
               {files.map((f) => (
                 <div key={f.name} className="flex items-center gap-3 px-4 py-2.5">
-                  <FileText className="h-4 w-4 text-slate-400 shrink-0" />
+                  <Icon name="briefcase" size={4} className="text-slate-400 shrink-0" />
                   <span className="flex-1 truncate text-sm text-slate-700">{f.name}</span>
                   <span className="text-xs text-slate-400">{(f.size / 1024).toFixed(0)} KB</span>
                   <button type="button" onClick={() => setFiles((p) => p.filter((x) => x.name !== f.name))}
@@ -202,8 +203,8 @@ export function BulkUploadForm({ jobs }: { jobs: Job[] }) {
           className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 border-0 text-white h-11 font-semibold shadow-md"
         >
           {pending
-            ? <><Loader2 className="h-4 w-4 animate-spin" /> Uploading…</>
-            : <><Upload className="h-4 w-4" /> Upload {files.length > 0 ? files.length : ""} resume{files.length !== 1 ? "s" : ""}</>
+            ? <><Icon name="loader" size={4} className="animate-spin" /> Uploading…</>
+            : <><Icon name="upload" size={4} /> Upload {files.length > 0 ? files.length : ""} resume{files.length !== 1 ? "s" : ""}</>
           }
         </Button>
       </div>
@@ -241,7 +242,7 @@ export function BulkUploadForm({ jobs }: { jobs: Job[] }) {
             className="flex-1 rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 border-0 text-white h-11 font-semibold shadow-md"
           >
             {pending
-              ? <><Loader2 className="h-4 w-4 animate-spin" /> Starting…</>
+              ? <><Icon name="loader" size={4} className="animate-spin" /> Starting…</>
               : <><Play className="h-4 w-4" /> Start AI analysis</>
             }
           </Button>
@@ -268,7 +269,7 @@ export function BulkUploadForm({ jobs }: { jobs: Job[] }) {
               {done} done · {failed} issues · {(bulkJob?.totalCount ?? 0) - done - failed} remaining
             </p>
           </div>
-          {polling && <Loader2 className="h-5 w-5 animate-spin text-slate-400" />}
+          {polling && <Icon name="loader" size={5} className="animate-spin text-slate-400" />}
           {step === "done" && <CheckCircle2 className="h-5 w-5 text-emerald-500" />}
         </div>
 
