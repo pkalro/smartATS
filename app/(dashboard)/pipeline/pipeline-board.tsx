@@ -63,15 +63,13 @@ function CandidateCard({ app }: { app: AppCard }) {
       className="group block rounded-xl border border-slate-200 bg-white p-3 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all hover:shadow-md hover:border-blue-200 hover:-translate-y-0.5"
     >
       {/* Avatar row */}
-      <div className="flex items-center justify-between gap-1.5 mb-2">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600 text-[11px] font-bold text-white shadow-sm">
-            {(app.candidateName ?? "?").charAt(0).toUpperCase()}
-          </div>
-          <span className="font-semibold text-slate-800 leading-tight truncate text-[13px] group-hover:text-blue-700 transition-colors">
-            {app.candidateName || "Unnamed"}
-          </span>
+      <div className="flex items-center gap-1.5 mb-2 min-w-0">
+        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600 text-[11px] font-bold text-white shadow-sm">
+          {(app.candidateName ?? "?").charAt(0).toUpperCase()}
         </div>
+        <span className="flex-1 min-w-0 font-semibold text-slate-800 leading-tight truncate text-[13px] group-hover:text-blue-700 transition-colors">
+          {app.candidateName || "Unnamed"}
+        </span>
         <ScoreChip score={app.score} />
       </div>
 
