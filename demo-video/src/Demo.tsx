@@ -1,9 +1,9 @@
 /**
  * Main Demo composition — assembles all scenes with Sequence + CrossFade.
- * Total duration: ~1380 frames = 46 seconds @ 30fps
+ * Total duration: ~1440 frames = 48 seconds @ 30fps
  */
 import React from "react";
-import { Sequence, useCurrentFrame, useVideoConfig } from "remotion";
+import { Audio, Sequence, staticFile, useCurrentFrame, useVideoConfig, interpolate } from "remotion";
 import { HeroScene }          from "./scenes/01-Hero";
 import { UploadScene }        from "./scenes/02-Upload";
 import { ScreeningKitScene }  from "./scenes/03-ScreeningKit";
@@ -63,8 +63,33 @@ function SceneWithLabel({
 }
 
 export function Demo() {
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+
+  // Background music volume: fade in over first 30 frames, fade out over last 30 frames
+  const bgVolume = interpolate(
+    frame,
+    [0, 30, durationInFrames - 30, durationInFrames],
+    [0, 0.18, 0.18, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+
+  // Voiceover volume: fade in over first 10 frames, fade out over last 20 frames
+  const voVolume = interpolate(
+    frame,
+    [0, 10, durationInFrames - 20, durationInFrames],
+    [0, 1, 1, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+
   return (
     <>
+      {/* ── Audio tracks ── */}
+      {/* Background music — runs the full duration at low volume */}
+      <Audio src={staticFile("bgmusic.mp3")} volume={bgVolume} />
+      {/* Voiceover — starts at frame 0, plays over everything */}
+      <Audio src={staticFile("voiceover.mp3")} volume={voVolume} />
+
       <Sequence from={STARTS[0]} durationInFrames={SCENES[0].dur}>
         <SceneWithLabel name="01-Hero" dur={SCENES[0].dur}>
           <HeroScene />
