@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useTransition } from "react";
+import { useState, useMemo, useTransition, useRef, useEffect } from "react";
 import Link from "next/link";
 import { parseSkills } from "@/lib/skills";
 import { Icon } from "@/components/icons/icon";
@@ -10,6 +10,13 @@ import type { CandidateStatus } from "@/lib/types";
 
 const ALL_STATUSES = ["NEW","SCREENING","SHORTLISTED","INTERVIEWING","OFFER","HIRED","REJECTED","WITHDRAWN"];
 const ALL_SOURCES  = ["LINKEDIN","NAUKRI","REFERRAL","INBOUND","OTHER"];
+
+// Dot colour per stage for the dropdown menu
+const STATUS_DOT: Record<string, string> = {
+  NEW: "bg-slate-400", SCREENING: "bg-blue-500", SHORTLISTED: "bg-violet-500",
+  INTERVIEWING: "bg-amber-500", OFFER: "bg-orange-500", HIRED: "bg-emerald-500",
+  REJECTED: "bg-red-400", WITHDRAWN: "bg-slate-300",
+};
 
 type Application = { id: string; jobTitle: string; jobId: string; status: string };
 
@@ -35,27 +42,70 @@ const STAGE_LABELS: Record<string, string> = {
   REJECTED: "Rejected", WITHDRAWN: "Withdrawn",
 };
 
-function StageSelect({ applicationId, status }: { applicationId: string; status: string }) {
-  const [, startT] = useTransition();
+/**
+ * Fully custom stage-change dropdown — no native <select>.
+ * Renders as a badge pill; clicking opens a positioned menu.
+ */
+function StageDropdown({ applicationId, status }: { applicationId: string; status: string }) {
+  const [open, setOpen]   = useState(false);
+  const [, startT]        = useTransition();
+  const ref               = useRef<HTMLDivElement>(null);
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
   const colorClass = STATUS_STYLES[status] ?? "bg-slate-100 text-slate-500 border-slate-200";
+  const label      = STAGE_LABELS[status] ?? status;
+
   return (
-    <div className="relative inline-flex items-center shrink-0">
-      <select
-        value={status}
-        onClick={(e) => e.stopPropagation()}
-        onChange={(e) => {
-          e.stopPropagation();
-          startT(() => updateApplicationStatus(applicationId, e.target.value as CandidateStatus));
-        }}
-        className={`appearance-none h-[22px] rounded-full border pl-2 pr-5 text-[10px] font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${colorClass}`}
+    <div ref={ref} className="relative shrink-0" onClick={(e) => e.stopPropagation()}>
+      {/* Trigger badge */}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className={`inline-flex items-center gap-1 h-[22px] rounded-full border pl-2 pr-1.5 text-[10px] font-semibold cursor-pointer transition-opacity hover:opacity-80 ${colorClass}`}
       >
-        {Object.entries(STAGE_LABELS).map(([v, label]) => (
-          <option key={v} value={v}>{label}</option>
-        ))}
-      </select>
-      <svg className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-2.5 w-2.5 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="6 9 12 15 18 9" />
-      </svg>
+        {label}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+          className={`h-2.5 w-2.5 opacity-60 transition-transform ${open ? "rotate-180" : ""}`}>
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+
+      {/* Dropdown menu */}
+      {open && (
+        <div className="absolute top-full left-0 mt-1.5 z-50 w-44 rounded-xl border border-slate-200 bg-white py-1 shadow-xl shadow-slate-900/10">
+          {Object.entries(STAGE_LABELS).map(([v, lbl]) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => {
+                startT(() => updateApplicationStatus(applicationId, v as CandidateStatus));
+                setOpen(false);
+              }}
+              className={`w-full flex items-center gap-2.5 px-3 py-1.5 text-xs transition-colors text-left hover:bg-slate-50 ${
+                v === status ? "font-bold text-slate-900" : "font-medium text-slate-600"
+              }`}
+            >
+              <span className={`h-2 w-2 rounded-full shrink-0 ${STATUS_DOT[v] ?? "bg-slate-400"}`} />
+              {lbl}
+              {v === status && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                  className="ml-auto h-3 w-3 text-blue-500">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -265,7 +315,7 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
                                   {a.jobTitle}
                                 </Link>
                                 {i === 0 && c.primaryApplicationId ? (
-                                  <StageSelect applicationId={c.primaryApplicationId} status={a.status} />
+                                  <StageDropdown applicationId={c.primaryApplicationId} status={a.status} />
                                 ) : (
                                   <span className={`inline-flex items-center h-[22px] rounded-full border px-2 text-[10px] font-semibold shrink-0 ${STATUS_STYLES[a.status] ?? "bg-slate-100 text-slate-500 border-slate-200"}`}>
                                     {a.status.charAt(0) + a.status.slice(1).toLowerCase()}
