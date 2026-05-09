@@ -137,9 +137,9 @@ export function PipelineBoard({ applications, jobs }: { applications: AppCard[];
         </div>
       </div>
 
-      {/* Active columns — scroll horizontally on mobile */}
-      <div className="-mx-4 md:mx-0 overflow-x-auto pb-2">
-      <div className="flex gap-3 px-4 md:px-0 md:grid md:grid-cols-3 lg:grid-cols-6" style={{ minWidth: "min-content" }}>
+      {/* Active columns — horizontal scroll on mobile, grid on desktop */}
+      <div className="overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+      <div className="flex gap-3 md:grid md:grid-cols-3 lg:grid-cols-6">
         {ACTIVE_STAGES.map((col) => {
           const cards = byStatus[col.status];
           return (

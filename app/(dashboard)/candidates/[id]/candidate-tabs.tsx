@@ -33,14 +33,14 @@ export function CandidateTabs({
   return (
     <div>
       <div className="sticky top-[calc(3.5rem+49px)] md:top-[49px] z-20 -mx-4 md:-mx-8 bg-white/95 backdrop-blur border-b border-slate-200 px-4 md:px-8 shadow-sm shadow-slate-900/[0.03]">
-        <nav className="flex" role="tablist">
+        <nav className="flex overflow-x-auto scrollbar-none" role="tablist">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               role="tab"
               aria-selected={active === id}
               onClick={() => setActive(id)}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+              className={`shrink-0 flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                 active === id
                   ? "border-blue-600 text-blue-700"
                   : "border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300"
