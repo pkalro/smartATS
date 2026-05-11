@@ -4,6 +4,7 @@ import { getUsage } from "@/lib/usage";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookingLinkForm } from "./booking-link-form";
 import { RecruiterProfileForm } from "./recruiter-profile-form";
+import { DangerZone } from "./danger-zone";
 
 export default async function SettingsPage() {
   const session = await auth();
@@ -61,6 +62,16 @@ export default async function SettingsPage() {
             <dt className="text-muted-foreground">AI calls this month</dt>
             <dd>{usage.count} / {usage.cap}</dd>
           </dl>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Your data &amp; account</CardTitle>
+          <CardDescription>Export everything we hold on you, or delete your account permanently.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DangerZone email={user?.email ?? ""} />
         </CardContent>
       </Card>
     </div>

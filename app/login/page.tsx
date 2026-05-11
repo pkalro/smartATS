@@ -95,11 +95,12 @@ export default async function LoginPage({
             </button>
           </form>
 
-          <p className="mt-6 text-center text-xs text-slate-400">
+          <p className="mt-6 text-center text-xs text-slate-400 leading-relaxed">
             By signing in you agree to our{" "}
-            <a href="#" className="underline hover:text-slate-700">Terms</a>{" "}
+            <Link href="/terms" className="underline hover:text-slate-700">Terms</Link>,{" "}
+            <Link href="/privacy" className="underline hover:text-slate-700">Privacy Policy</Link>{" "}
             and{" "}
-            <a href="#" className="underline hover:text-slate-700">Privacy Policy</a>.
+            <Link href="/dpa" className="underline hover:text-slate-700">Data Processing Agreement</Link>.
           </p>
 
           <div className="mt-10 pt-6 border-t border-slate-100">

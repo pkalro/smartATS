@@ -7,6 +7,7 @@ import { UsageBannerAsync } from "@/components/usage-banner-async";
 import { SidebarNav } from "@/components/sidebar-nav";
 import { PostHogIdentify } from "@/components/posthog-identify";
 import { FeedbackWidget } from "@/components/feedback-widget";
+import { ManageCookiesLink } from "@/components/cookie-consent";
 
 export default async function DashboardLayout({
   children,
@@ -68,6 +69,14 @@ export default async function DashboardLayout({
                 <Icon name="log-out" size={3.5} />
               </button>
             </form>
+          </div>
+
+          {/* Legal links */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-3 pt-2.5 text-[10px] text-slate-400">
+            <Link href="/privacy" className="hover:text-slate-700">Privacy</Link>
+            <Link href="/terms" className="hover:text-slate-700">Terms</Link>
+            <Link href="/dpa" className="hover:text-slate-700">DPA</Link>
+            <ManageCookiesLink className="hover:text-slate-700" />
           </div>
         </div>
       </aside>

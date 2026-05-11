@@ -484,9 +484,11 @@ export default async function LandingPage() {
             <span className="font-bold text-slate-700 text-sm">Smart ATS</span>
           </div>
           <p className="text-xs text-slate-400">© {new Date().getFullYear()} Smart ATS. Built for recruiters who actually want to go home on time.</p>
-          <div className="flex gap-6 text-xs text-slate-400">
-            <a href="#" className="hover:text-slate-700 transition-colors">Privacy</a>
-            <a href="#" className="hover:text-slate-700 transition-colors">Terms</a>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-slate-400 justify-center">
+            <Link href="/privacy" className="hover:text-slate-700 transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-slate-700 transition-colors">Terms</Link>
+            <Link href="/dpa" className="hover:text-slate-700 transition-colors">Data processing</Link>
+            <a href="mailto:privacy@smartats.in" className="hover:text-slate-700 transition-colors">Contact</a>
             <Link href="/login" className="hover:text-slate-700 transition-colors">Sign in</Link>
           </div>
         </div>
