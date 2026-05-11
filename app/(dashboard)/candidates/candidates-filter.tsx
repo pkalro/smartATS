@@ -264,21 +264,25 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
             })}
           </div>
 
-          {/* ── Desktop table (≥ md) ── */}
+          {/* ── Desktop table (≥ md) — 4-zone layout ── */}
           <div className="hidden md:block overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm table-fixed">
+              <colgroup>
+                <col className="w-14" />          {/* avatar */}
+                <col className="w-[220px]" />     {/* candidate */}
+                <col />                            {/* applications — takes remaining space */}
+                <col className="w-[200px]" />     {/* details */}
+                <col className="w-14" />           {/* age */}
+                <col className="w-10" />           {/* arrow */}
+              </colgroup>
               <thead>
                 <tr className="border-b border-slate-100 text-left">
-                  <th className="w-12 pl-5 pr-0 py-3" />
-                  <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Candidate</th>
-                  <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Roles</th>
-                  <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Score</th>
-                  <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Skills</th>
-                  <th className="hidden lg:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Notice</th>
-                  <th className="hidden lg:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Salary</th>
-                  <th className="hidden xl:table-cell px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Source</th>
-                  <th className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Updated</th>
-                  <th className="w-8" />
+                  <th className="pl-5 pr-0 py-3" />
+                  <th className="px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Candidate</th>
+                  <th className="px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Applications</th>
+                  <th className="px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Details</th>
+                  <th className="px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400 text-right">Age</th>
+                  <th />
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
@@ -288,74 +292,107 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
                   const isStale = days >= 3 && !["HIRED","REJECTED","WITHDRAWN"].includes(c.status);
                   return (
                     <tr key={c.id} className="group hover:bg-slate-50/70 transition-colors">
-                      <td className="pl-5 pr-0 py-3.5">
+
+                      {/* ── Avatar ── */}
+                      <td className="pl-5 pr-0 py-4 align-top pt-4">
                         <Link href={`/candidates/${c.id}`} className="block">
                           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600 text-sm font-bold text-white shadow-sm">
                             {(c.name ?? "?").charAt(0).toUpperCase()}
                           </div>
                         </Link>
                       </td>
-                      <td className="px-5 py-3.5">
-                        <Link href={`/candidates/${c.id}`} className="block">
-                          <div className="font-semibold text-slate-900 group-hover:text-blue-700 transition-colors truncate max-w-[160px]">
-                            {c.name || "Unnamed"}
+
+                      {/* ── Candidate zone: name + title + email + score ── */}
+                      <td className="px-4 py-4 align-top">
+                        <Link href={`/candidates/${c.id}`} className="block space-y-0.5">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="font-semibold text-slate-900 group-hover:text-blue-700 transition-colors truncate text-sm leading-snug">
+                              {c.name || "Unnamed"}
+                            </span>
+                            <ScoreChip score={c.score} />
                           </div>
-                          {c.currentTitle && <div className="text-xs text-slate-500 truncate max-w-[160px]">{c.currentTitle}</div>}
-                          {c.email && <div className="text-[11px] text-slate-400 font-mono truncate max-w-[160px]">{c.email}</div>}
+                          {c.currentTitle && (
+                            <p className="text-xs text-slate-500 truncate leading-snug">{c.currentTitle}</p>
+                          )}
+                          {c.email && (
+                            <p className="text-[11px] text-slate-400 font-mono truncate leading-snug">{c.email}</p>
+                          )}
                         </Link>
                       </td>
-                      <td className="px-5 py-3.5 max-w-[220px]">
+
+                      {/* ── Applications zone: [dot] job title [status] per row ── */}
+                      <td className="px-4 py-4 align-top">
                         {c.applications.length === 0 ? (
                           <span className="text-xs text-slate-300">—</span>
                         ) : (
-                          <div className="flex flex-col gap-1">
-                            {c.applications.slice(0, 2).map((a, i) => (
-                              <div key={a.jobId} className="flex items-center gap-1.5 min-w-0">
+                          <div className="flex flex-col gap-1.5">
+                            {c.applications.slice(0, 3).map((a, i) => (
+                              <div key={a.jobId} className="flex items-center gap-2 min-w-0">
+                                {/* Status dot */}
+                                <span className={`shrink-0 h-2 w-2 rounded-full ${STATUS_DOT[a.status] ?? "bg-slate-300"}`} />
+                                {/* Job title */}
                                 <Link
                                   href={`/jobs/${a.jobId}`}
                                   onClick={(e) => e.stopPropagation()}
-                                  className="min-w-0 flex-1 text-xs text-slate-600 hover:text-blue-600 hover:underline truncate"
+                                  className="min-w-0 flex-1 text-xs font-medium text-slate-700 hover:text-blue-600 truncate"
                                 >
                                   {a.jobTitle}
                                 </Link>
+                                {/* Stage — dropdown for primary, compact badge for rest */}
                                 {i === 0 && c.primaryApplicationId ? (
                                   <StageDropdown applicationId={c.primaryApplicationId} status={a.status} />
                                 ) : (
-                                  <span className={`shrink-0 inline-flex items-center h-[18px] rounded-full border px-1.5 text-[10px] font-semibold ${STATUS_STYLES[a.status] ?? "bg-slate-100 text-slate-500 border-slate-200"}`}>
-                                    {a.status.charAt(0) + a.status.slice(1).toLowerCase()}
+                                  <span className={`shrink-0 inline-flex items-center rounded-full border px-2 py-px text-[10px] font-semibold ${STATUS_STYLES[a.status] ?? "bg-slate-100 text-slate-500 border-slate-200"}`}>
+                                    {STAGE_LABELS[a.status] ?? a.status.charAt(0) + a.status.slice(1).toLowerCase()}
                                   </span>
                                 )}
                               </div>
                             ))}
-                            {c.applications.length > 2 && (
-                              <span className="text-[11px] text-slate-400">+{c.applications.length - 2} more</span>
+                            {c.applications.length > 3 && (
+                              <span className="text-[10px] text-slate-400 pl-4">+{c.applications.length - 3} more</span>
                             )}
                           </div>
                         )}
                       </td>
-                      <td className="px-5 py-3.5"><ScoreChip score={c.score} /></td>
-                      <td className="px-5 py-3.5">
-                        <div className="flex flex-wrap gap-1">
-                          {skills.slice(0, 3).map((s) => (
-                            <span key={s} className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-600 font-medium">{s}</span>
-                          ))}
-                          {skills.length > 3 && <span className="text-[11px] text-slate-400">+{skills.length - 3}</span>}
+
+                      {/* ── Details zone: skills + notice · salary · source ── */}
+                      <td className="px-4 py-4 align-top">
+                        <div className="space-y-1.5">
+                          {skills.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {skills.slice(0, 3).map((s) => (
+                                <span key={s} className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-600 font-medium">
+                                  {s}
+                                </span>
+                              ))}
+                              {skills.length > 3 && (
+                                <span className="text-[10px] text-slate-400">+{skills.length - 3}</span>
+                              )}
+                            </div>
+                          )}
+                          {(c.noticePeriod || c.currentSalary || c.source) && (
+                            <p className="text-[11px] text-slate-400 leading-snug">
+                              {[
+                                c.noticePeriod,
+                                c.currentSalary,
+                                c.source ? c.source.charAt(0) + c.source.slice(1).toLowerCase() : null,
+                              ].filter(Boolean).join(" · ")}
+                            </p>
+                          )}
                         </div>
                       </td>
-                      <td className="hidden lg:table-cell px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">{c.noticePeriod || <span className="text-slate-300">—</span>}</td>
-                      <td className="hidden lg:table-cell px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">{c.currentSalary || <span className="text-slate-300">—</span>}</td>
-                      <td className="hidden xl:table-cell px-5 py-3.5">
-                        {c.source ? (
-                          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">
-                            {c.source.charAt(0) + c.source.slice(1).toLowerCase()}
-                          </span>
-                        ) : <span className="text-slate-300 text-xs">—</span>}
+
+                      {/* ── Age ── */}
+                      <td className="px-4 py-4 align-top text-right">
+                        <span className={`text-[11px] font-medium tabular-nums ${isStale ? "text-amber-500" : "text-slate-300"}`}>
+                          {days === 0 ? "today" : `${days}d`}
+                        </span>
                       </td>
-                      <td className={`px-5 py-3.5 text-xs whitespace-nowrap font-medium ${isStale ? "text-amber-600" : "text-slate-400"}`}>
-                        {days === 0 ? "today" : `${days}d ago`}
-                      </td>
-                      <td className="pr-4">
-                        <Link href={`/candidates/${c.id}`} className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-300 hover:text-blue-600 hover:bg-blue-50 opacity-0 group-hover:opacity-100 transition-all">
+
+                      {/* ── Arrow ── */}
+                      <td className="pr-3 align-top pt-4">
+                        <Link href={`/candidates/${c.id}`}
+                          className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-300 hover:text-blue-600 hover:bg-blue-50 opacity-0 group-hover:opacity-100 transition-all">
                           <Icon name="chevron-right" size={3.5} />
                         </Link>
                       </td>
