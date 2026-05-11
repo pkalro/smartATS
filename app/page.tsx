@@ -43,7 +43,7 @@ export default async function LandingPage() {
       <main>
 
         {/* ── Hero ── */}
-        <section className="relative pt-32 pb-24 px-6">
+        <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 px-5 sm:px-6">
           {/* Background gradient blob */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-gradient-to-br from-blue-100 via-violet-100 to-indigo-50 opacity-60 blur-3xl" />
@@ -51,14 +51,14 @@ export default async function LandingPage() {
 
           <div className="relative mx-auto max-w-4xl text-center">
             {/* Pill badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-xs font-semibold text-blue-700 mb-8">
-              <Zap className="h-3.5 w-3.5" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 sm:px-4 py-1.5 text-xs font-semibold text-blue-700 mb-6 sm:mb-8">
+              <Zap className="h-3.5 w-3.5 shrink-0" />
               AI-powered · Built for solo recruiters & small teams
             </div>
 
-            <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.05]">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.05]">
               Hire smarter,{" "}
-              <span className="relative">
+              <span className="relative inline-block">
                 <span className="relative z-10 bg-gradient-to-r from-blue-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
                   not harder
                 </span>
@@ -66,13 +66,13 @@ export default async function LandingPage() {
               </span>
             </h1>
 
-            <p className="mt-7 text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            <p className="mt-5 sm:mt-7 text-base sm:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed px-2">
               Smart ATS turns messy job descriptions and raw resumes into structured pipelines, scored candidates, and interview-ready dossiers — in seconds, not hours.
             </p>
 
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button asChild size="lg" className="h-13 px-8 text-base bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 border-0 text-white shadow-lg shadow-blue-200/60 rounded-xl">
-                <Link href="/login" className="flex items-center gap-2">
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+              <Button asChild size="lg" className="w-full sm:w-auto h-12 sm:h-13 px-8 text-base bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 border-0 text-white shadow-lg shadow-blue-200/60 rounded-xl">
+                <Link href="/login" className="flex items-center justify-center gap-2">
                   Start for free <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
@@ -82,87 +82,104 @@ export default async function LandingPage() {
             </div>
 
             {/* Social proof micro-strip */}
-            <div className="mt-14 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400 font-medium">
+            <div className="mt-8 sm:mt-14 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-400 font-medium">
               <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-green-500" /> No credit card required</span>
               <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-green-500" /> Setup in under 5 minutes</span>
               <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-green-500" /> AI-powered screening</span>
             </div>
           </div>
 
-          {/* Hero product mockup */}
-          <div className="relative mx-auto mt-20 max-w-5xl">
-            <div className="rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/60 overflow-hidden">
+          {/* ── Hero product mockup ── */}
+          <div className="relative mx-auto mt-12 sm:mt-20 max-w-5xl">
+            <div className="rounded-xl sm:rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/60 overflow-hidden">
+
               {/* Mock browser chrome */}
-              <div className="flex items-center gap-2 border-b border-slate-100 bg-slate-50 px-4 py-3">
-                <div className="flex gap-1.5">
-                  <div className="h-3 w-3 rounded-full bg-red-400" />
-                  <div className="h-3 w-3 rounded-full bg-yellow-400" />
-                  <div className="h-3 w-3 rounded-full bg-green-400" />
+              <div className="flex items-center gap-2 border-b border-slate-100 bg-slate-50 px-3 sm:px-4 py-2.5 sm:py-3">
+                <div className="flex gap-1.5 shrink-0">
+                  <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-red-400" />
+                  <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-yellow-400" />
+                  <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-green-400" />
                 </div>
-                <div className="flex-1 rounded-md bg-white border border-slate-200 px-3 py-1 text-xs text-slate-400 max-w-xs mx-auto text-center">
+                <div className="flex-1 rounded-md bg-white border border-slate-200 px-3 py-1 text-[10px] sm:text-xs text-slate-400 max-w-[200px] sm:max-w-xs mx-auto text-center truncate">
                   app.smartats.ai/pipeline
                 </div>
               </div>
+
               {/* Mock pipeline UI */}
-              <div className="p-6 bg-slate-50 min-h-[340px]">
-                <div className="flex items-center justify-between mb-5">
-                  <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
-                      <Users className="h-4 w-4 text-white" />
+              <div className="bg-slate-50">
+                {/* Mockup header — compact on mobile */}
+                <div className="flex items-center justify-between px-3 sm:px-6 pt-3 sm:pt-5 pb-3 sm:pb-4 gap-2">
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
+                      <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
                     </div>
-                    <div>
-                      <div className="text-sm font-semibold text-slate-800">Pipeline · Senior Frontend Engineer</div>
-                      <div className="text-xs text-slate-400">24 candidates · 6 active</div>
+                    <div className="min-w-0">
+                      <div className="text-xs sm:text-sm font-semibold text-slate-800 truncate">Pipeline · Senior Frontend Engineer</div>
+                      <div className="text-[10px] sm:text-xs text-slate-400">24 candidates · 6 active</div>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <div className="h-7 rounded-lg bg-white border border-slate-200 px-3 flex items-center text-xs text-slate-500 shadow-sm">All roles</div>
-                    <div className="h-7 rounded-lg bg-blue-600 px-3 flex items-center text-xs text-white gap-1 shadow-sm"><Sparkles className="h-3 w-3" />AI score</div>
+                  <div className="flex gap-1.5 sm:gap-2 shrink-0">
+                    <div className="h-6 sm:h-7 rounded-lg bg-white border border-slate-200 px-2 sm:px-3 flex items-center text-[10px] sm:text-xs text-slate-500 shadow-sm">All roles</div>
+                    <div className="h-6 sm:h-7 rounded-lg bg-blue-600 px-2 sm:px-3 flex items-center text-[10px] sm:text-xs text-white gap-1 shadow-sm">
+                      <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                      <span className="hidden sm:inline">AI score</span>
+                      <span className="sm:hidden">Score</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Kanban columns */}
-                <div className="grid grid-cols-5 gap-3">
-                  {[
-                    { label: "Screening", color: "bg-blue-100 text-blue-700", cards: [
-                      { name: "Priya Sharma", score: 82, tag: "React · 6 yrs" },
-                      { name: "Alex Chen", score: 74, tag: "Vue · 4 yrs" },
-                    ]},
-                    { label: "Shortlisted", color: "bg-violet-100 text-violet-700", cards: [
-                      { name: "Marcus Liu", score: 91, tag: "Next.js · 7 yrs" },
-                    ]},
-                    { label: "Interviewing", color: "bg-amber-100 text-amber-700", cards: [
-                      { name: "Sara Mendes", score: 88, tag: "TypeScript · 5 yrs" },
-                    ]},
-                    { label: "Offer", color: "bg-orange-100 text-orange-700", cards: [] },
-                    { label: "Hired", color: "bg-green-100 text-green-700", cards: [] },
-                  ].map((col) => (
-                    <div key={col.label} className="rounded-xl bg-white border border-slate-200/80 p-3 shadow-sm">
-                      <div className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold mb-3 ${col.color}`}>
-                        {col.label}
-                      </div>
-                      <div className="space-y-2">
-                        {col.cards.map((c) => (
-                          <div key={c.name} className="rounded-lg border border-slate-100 bg-slate-50 p-2">
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-xs font-medium text-slate-700 truncate">{c.name}</span>
-                              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${c.score >= 80 ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}>{c.score}</span>
+                {/* Kanban — horizontal scroll on mobile, 5-col grid on desktop */}
+                <div className="overflow-x-auto pb-4 sm:pb-6 px-3 sm:px-6 scrollbar-none">
+                  <div className="flex gap-2.5 sm:gap-3 min-w-[640px] sm:min-w-0 sm:grid sm:grid-cols-5">
+                    {[
+                      { label: "Screening", color: "bg-blue-100 text-blue-700", cards: [
+                        { name: "Priya Sharma", score: 82, tag: "React · 6 yrs" },
+                        { name: "Alex Chen",    score: 74, tag: "Vue · 4 yrs"   },
+                      ]},
+                      { label: "Shortlisted",  color: "bg-violet-100 text-violet-700", cards: [
+                        { name: "Marcus Liu",   score: 91, tag: "Next.js · 7 yrs" },
+                      ]},
+                      { label: "Interviewing", color: "bg-amber-100 text-amber-700", cards: [
+                        { name: "Sara Mendes",  score: 88, tag: "TypeScript · 5 yrs" },
+                      ]},
+                      { label: "Offer",  color: "bg-orange-100 text-orange-700", cards: [] },
+                      { label: "Hired",  color: "bg-green-100  text-green-700",  cards: [] },
+                    ].map((col) => (
+                      <div key={col.label} className="rounded-xl bg-white border border-slate-200/80 p-2.5 sm:p-3 shadow-sm flex-1 min-w-[120px] sm:min-w-0">
+                        <div className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold mb-2.5 sm:mb-3 ${col.color}`}>
+                          {col.label}
+                        </div>
+                        <div className="space-y-1.5 sm:space-y-2">
+                          {col.cards.map((c) => (
+                            <div key={c.name} className="rounded-lg border border-slate-100 bg-slate-50 p-2">
+                              <div className="flex items-center justify-between mb-1 gap-1">
+                                <span className="text-[10px] sm:text-xs font-medium text-slate-700 truncate">{c.name}</span>
+                                <span className={`shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full ${c.score >= 80 ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}>
+                                  {c.score}
+                                </span>
+                              </div>
+                              <span className="text-[10px] text-slate-400">{c.tag}</span>
                             </div>
-                            <span className="text-[10px] text-slate-400">{c.tag}</span>
-                          </div>
-                        ))}
-                        {col.cards.length === 0 && (
-                          <div className="h-14 rounded-lg border-2 border-dashed border-slate-100 flex items-center justify-center">
-                            <span className="text-[10px] text-slate-300">Empty</span>
-                          </div>
-                        )}
+                          ))}
+                          {col.cards.length === 0 && (
+                            <div className="h-12 sm:h-14 rounded-lg border-2 border-dashed border-slate-100 flex items-center justify-center">
+                              <span className="text-[10px] text-slate-300">Empty</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+
+                {/* Swipe hint — mobile only */}
+                <div className="sm:hidden flex items-center justify-center gap-1.5 pb-3 text-[10px] text-slate-300">
+                  <span>←</span> swipe to explore <span>→</span>
                 </div>
               </div>
             </div>
-            {/* Floating score card */}
+
+            {/* Floating score card — desktop only */}
             <div className="absolute -right-4 top-20 hidden lg:block w-52 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl shadow-slate-200/50">
               <div className="flex items-center gap-2 mb-3">
                 <div className="h-6 w-6 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
@@ -180,7 +197,8 @@ export default async function LandingPage() {
                 <div className="flex gap-1.5 text-[10px]"><span className="text-red-500 font-bold">✗</span><span className="text-slate-500">No AWS experience</span></div>
               </div>
             </div>
-            {/* Floating time-saved card */}
+
+            {/* Floating time card — desktop only */}
             <div className="absolute -left-4 bottom-20 hidden lg:block w-44 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl shadow-slate-200/50">
               <div className="flex items-center gap-2 mb-2">
                 <Clock className="h-4 w-4 text-blue-500" />
