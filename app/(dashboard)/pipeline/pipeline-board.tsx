@@ -175,11 +175,11 @@ export function PipelineBoard({ applications, jobs }: { applications: AppCard[];
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Page header */}
-      <div className="flex items-start justify-between gap-4 flex-wrap">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 shadow-md shadow-amber-200">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 shadow-md shadow-amber-200">
             <Icon name="kanban" size={5} className="text-white" />
           </div>
           <div>
@@ -191,15 +191,15 @@ export function PipelineBoard({ applications, jobs }: { applications: AppCard[];
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="relative">
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1 sm:flex-none">
             <Icon name="search" size={3.5} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…"
-              className="h-8 w-44 rounded-lg border border-slate-200 bg-white pl-8 pr-3 text-sm text-slate-700 placeholder:text-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="h-9 w-full sm:w-44 rounded-lg border border-slate-200 bg-white pl-8 pr-3 text-sm text-slate-700 placeholder:text-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
           <select value={jobFilter} onChange={(e) => setJobFilter(e.target.value)}
-            className="h-8 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="h-9 flex-1 sm:flex-none rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 min-w-0"
           >
             <option value="all">All roles</option>
             {jobs.map((j) => <option key={j.id} value={j.id}>{j.title}</option>)}
@@ -207,32 +207,34 @@ export function PipelineBoard({ applications, jobs }: { applications: AppCard[];
         </div>
       </div>
 
-      {/* ── Stage summary bar (always visible) ── */}
-      <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-        {ACTIVE_STAGES.map((col) => {
-          const groups  = byStatus[col.status] ?? [];
-          const isOpen  = expandedCol === col.status;
-          return (
-            <button
-              key={col.status}
-              type="button"
-              onClick={() => toggleCol(col.status)}
-              className={`flex flex-col items-center gap-1.5 rounded-xl border py-3 px-2 transition-all ${
-                isOpen
-                  ? "border-blue-300 bg-blue-50 shadow-sm"
-                  : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
-              }`}
-            >
-              <div className={`flex items-center gap-1.5 rounded-full bg-gradient-to-r ${col.col} px-2.5 py-1 shadow-sm`}>
-                <span className="text-[11px] font-bold text-white">{col.label}</span>
-              </div>
-              <span className={`text-xl font-extrabold tabular-nums ${isOpen ? "text-blue-700" : "text-slate-800"}`}>
-                {groups.length}
-              </span>
-              <span className="text-[10px] text-slate-400">{isOpen ? "▲ hide" : "▼ show"}</span>
-            </button>
-          );
-        })}
+      {/* ── Stage summary bar — horizontal scroll on mobile, 6-col grid on desktop ── */}
+      <div className="-mx-4 md:mx-0 px-4 md:px-0 overflow-x-auto scrollbar-none">
+        <div className="flex gap-2 md:grid md:grid-cols-6 min-w-max md:min-w-0">
+          {ACTIVE_STAGES.map((col) => {
+            const groups  = byStatus[col.status] ?? [];
+            const isOpen  = expandedCol === col.status;
+            return (
+              <button
+                key={col.status}
+                type="button"
+                onClick={() => toggleCol(col.status)}
+                className={`flex flex-col items-center gap-1 rounded-xl border py-3 px-3 w-[100px] md:w-auto transition-all ${
+                  isOpen
+                    ? "border-blue-300 bg-blue-50 shadow-sm"
+                    : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
+                }`}
+              >
+                <div className={`flex items-center rounded-full bg-gradient-to-r ${col.col} px-2.5 py-1 shadow-sm`}>
+                  <span className="text-[11px] font-bold text-white">{col.label}</span>
+                </div>
+                <span className={`text-2xl font-extrabold tabular-nums leading-tight ${isOpen ? "text-blue-700" : "text-slate-800"}`}>
+                  {groups.length}
+                </span>
+                <span className="text-[10px] text-slate-400">{isOpen ? "▲ hide" : "▼ show"}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* ── Expanded column ── */}
@@ -263,7 +265,7 @@ export function PipelineBoard({ applications, jobs }: { applications: AppCard[];
             {groups.length === 0 ? (
               <div className="py-12 text-center text-sm text-slate-400">No candidates in this stage</div>
             ) : (
-              <div className="p-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="p-3 md:p-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {groups.map((g) => <CandidateCard key={g.candidateId} group={g} />)}
               </div>
             )}

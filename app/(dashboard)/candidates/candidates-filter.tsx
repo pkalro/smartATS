@@ -304,27 +304,31 @@ export function CandidatesFilter({ candidates }: { candidates: Candidate[] }) {
                           {c.email && <div className="text-[11px] text-slate-400 font-mono truncate max-w-[160px]">{c.email}</div>}
                         </Link>
                       </td>
-                      <td className="px-5 py-3.5">
+                      <td className="px-5 py-3.5 max-w-[220px]">
                         {c.applications.length === 0 ? (
                           <span className="text-xs text-slate-300">—</span>
                         ) : (
-                          <div className="flex flex-col gap-1.5">
+                          <div className="flex flex-col gap-1">
                             {c.applications.slice(0, 2).map((a, i) => (
-                              <div key={a.jobId} className="flex items-center gap-1.5 flex-wrap">
-                                <Link href={`/jobs/${a.jobId}`} onClick={(e) => e.stopPropagation()} className="text-xs text-slate-600 hover:text-blue-600 hover:underline truncate max-w-[110px]">
+                              <div key={a.jobId} className="flex items-center gap-1.5 min-w-0">
+                                <Link
+                                  href={`/jobs/${a.jobId}`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="min-w-0 flex-1 text-xs text-slate-600 hover:text-blue-600 hover:underline truncate"
+                                >
                                   {a.jobTitle}
                                 </Link>
                                 {i === 0 && c.primaryApplicationId ? (
                                   <StageDropdown applicationId={c.primaryApplicationId} status={a.status} />
                                 ) : (
-                                  <span className={`inline-flex items-center h-[22px] rounded-full border px-2 text-[10px] font-semibold shrink-0 ${STATUS_STYLES[a.status] ?? "bg-slate-100 text-slate-500 border-slate-200"}`}>
+                                  <span className={`shrink-0 inline-flex items-center h-[18px] rounded-full border px-1.5 text-[10px] font-semibold ${STATUS_STYLES[a.status] ?? "bg-slate-100 text-slate-500 border-slate-200"}`}>
                                     {a.status.charAt(0) + a.status.slice(1).toLowerCase()}
                                   </span>
                                 )}
                               </div>
                             ))}
                             {c.applications.length > 2 && (
-                              <span className="text-xs text-slate-400">+{c.applications.length - 2} more</span>
+                              <span className="text-[11px] text-slate-400">+{c.applications.length - 2} more</span>
                             )}
                           </div>
                         )}
