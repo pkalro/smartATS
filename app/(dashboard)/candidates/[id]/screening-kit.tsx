@@ -18,6 +18,8 @@ type KitData = {
   processWhatsapp: string | null;
 };
 
+type ScreeningQuestion = { question: string; keywords: string[] };
+
 function parseJsonArr(raw: string | null | undefined): string[] {
   if (!raw) return [];
   try {
@@ -26,6 +28,28 @@ function parseJsonArr(raw: string | null | undefined): string[] {
   } catch { /* empty */ }
   // plain string fallback (old data): split into sentences
   return raw.split(/(?<=[.!?])\s+/).filter(Boolean);
+}
+
+/** Parses screening questions — handles both legacy string[] and new {question,keywords}[] */
+function parseScreeningQuestions(raw: string | null | undefined): ScreeningQuestion[] {
+  if (!raw) return [];
+  try {
+    const p = JSON.parse(raw);
+    if (!Array.isArray(p)) return [];
+    // New format: [{question, keywords}]
+    if (p.length > 0 && typeof p[0] === "object" && "question" in p[0]) {
+      return p.map((x) => ({
+        question: String(x.question ?? ""),
+        keywords: Array.isArray(x.keywords) ? x.keywords.map(String) : [],
+      }));
+    }
+    // Legacy format: string[] — no keywords
+    return p
+      .filter((x): x is string => typeof x === "string")
+      .map((q) => ({ question: q, keywords: [] }));
+  } catch { /* empty */ }
+  // Raw string fallback
+  return raw.split(/(?<=[.!?])\s+/).filter(Boolean).map((q) => ({ question: q, keywords: [] }));
 }
 
 function BulletList({ items, className }: { items: string[]; className?: string }) {
@@ -73,7 +97,7 @@ export function ScreeningKit({
   const effectiveHasJob = hasJob || !!selectedJobId;
   const pitchPoints = parseJsonArr(kit.pitchDeck);
   const gapPoints = parseJsonArr(kit.gapAnalysis);
-  const questions = parseJsonArr(kit.screeningQuestions);
+  const questions = parseScreeningQuestions(kit.screeningQuestions);
   const notePoints = parseJsonArr(kit.recruiterNotes);
   const hasKit = pitchPoints.length > 0 || gapPoints.length > 0;
 
@@ -167,13 +191,35 @@ export function ScreeningKit({
           <Card>
             <CardHeader>
               <CardTitle className="text-sm">Screening questions</CardTitle>
-              <CardDescription>Tailored to this candidate.</CardDescription>
+              <CardDescription>Tailored to this candidate. Keywords show what a strong answer sounds like.</CardDescription>
             </CardHeader>
             <CardContent>
               {questions.length > 0 ? (
-                <ol className="space-y-2 text-sm list-decimal list-inside">
-                  {questions.map((q, i) => (
-                    <li key={i} className="leading-relaxed">{q}</li>
+                <ol className="space-y-4 text-sm">
+                  {questions.map(({ question, keywords }, i) => (
+                    <li key={i} className="rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
+                      <div className="flex gap-2.5">
+                        <span className="shrink-0 mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-[10px] font-bold text-blue-700">
+                          {i + 1}
+                        </span>
+                        <span className="leading-relaxed text-slate-800">{question}</span>
+                      </div>
+                      {keywords.length > 0 && (
+                        <div className="mt-2.5 flex flex-wrap items-center gap-1.5 pl-7">
+                          <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+                            Listen for:
+                          </span>
+                          {keywords.map((kw, ki) => (
+                            <span
+                              key={ki}
+                              className="inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-700"
+                            >
+                              {kw}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </li>
                   ))}
                 </ol>
               ) : (

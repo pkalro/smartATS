@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CandidateForm } from "./candidate-form";
 import Link from "next/link";
+import { BackButton } from "@/components/back-button";
 
 export default async function NewCandidatePage({
   searchParams,
@@ -19,6 +20,7 @@ export default async function NewCandidatePage({
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
+      <BackButton href="/candidates" label="Candidates" />
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold">Screen a candidate</h1>

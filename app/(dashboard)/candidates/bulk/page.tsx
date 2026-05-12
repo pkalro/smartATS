@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { BulkUploadForm } from "./bulk-upload-form";
+import { BackButton } from "@/components/back-button";
 
 export default async function BulkUploadPage() {
   const session = await auth();
@@ -12,6 +13,7 @@ export default async function BulkUploadPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
+      <BackButton href="/candidates" label="Candidates" />
       <div>
         <h1 className="text-2xl font-bold">Bulk upload resumes</h1>
         <p className="text-muted-foreground">

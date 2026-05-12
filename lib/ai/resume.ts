@@ -1,9 +1,15 @@
 import { askJSON } from "@/lib/ai";
 
+export type ScreeningQuestion = {
+  question: string;
+  /** 3–5 keywords/phrases recruiter should listen for in the candidate's answer */
+  keywords: string[];
+};
+
 export type ScreeningKit = {
   pitchDeck: string[];        // 3-4 bullet points
   gapAnalysis: string[];      // 3-5 bullet points
-  screeningQuestions: string[];
+  screeningQuestions: ScreeningQuestion[];
   recruiterNotes: string[];   // 3-4 bullet points
   processEmail: string;
   processWhatsapp: string;
@@ -25,7 +31,7 @@ Given a candidate profile and job description, produce:
 
 1. pitchDeck — 3-4 SHORT bullet points (not sentences) pitching the role to the candidate. Each bullet: one crisp line. Highlight growth, impact, team culture. Return as a JSON string[].
 2. gapAnalysis — 3-5 SHORT bullet points identifying concrete gaps or strengths vs the JD. Each bullet starts with ✓ for a match or ✗ for a gap. Be specific. Return as a JSON string[].
-3. screeningQuestions — exactly 5 targeted screening questions. Mix technical and behavioral. Reference their actual background. Return as a JSON string[].
+3. screeningQuestions — exactly 5 targeted screening questions. Mix technical and behavioral. Reference their actual background. For each question also list 3–5 keywords or phrases the recruiter should listen for in the candidate's answer (the "green flag" signals — specific terms, technologies, methodologies, or concepts that indicate a strong answer). Return as a JSON array of objects: [{ "question": string, "keywords": string[] }].
 4. recruiterNotes — 3-4 SHORT bullet points for the recruiter. How to position the candidate, red flags to probe, suggested approach. Each bullet is one crisp line. Return as a JSON string[].
 5. processEmail — a warm email (150-200 words) explaining the interview process. Professional but friendly. ${roundsNote ? `Include these stages: ${args.interviewRounds?.join(", ")}.` : "Keep process generic since no stages were specified."}
 6. processWhatsapp — a shorter WhatsApp message (50-80 words, casual) covering the same process info.
@@ -34,7 +40,7 @@ Output schema (JSON only):
 {
   "pitchDeck": string[],
   "gapAnalysis": string[],
-  "screeningQuestions": string[],
+  "screeningQuestions": [{ "question": string, "keywords": string[] }],
   "recruiterNotes": string[],
   "processEmail": string,
   "processWhatsapp": string
@@ -96,7 +102,24 @@ Rules:
 - Salaries: keep them as written including currency (e.g. "$120k", "₹18 LPA").
 ${
   wantsScore
-    ? `- Also produce "score" (0-100, integer) measuring fit vs. the job description, and "scoreRationale" (2-3 sentences explaining the score, citing concrete matches and gaps).`
+    ? `- Also produce "score" (0–100 integer) and "scoreRationale" (2–3 sentences).
+
+SCORING RULES — apply strictly:
+  Start at 100 and subtract:
+  • Missing a hard/required skill or technology explicitly listed in the JD: −15 to −20 per gap
+  • Insufficient years of experience vs. what the JD states: −10 to −20 (scale with shortfall)
+  • Missing a preferred/nice-to-have skill: −5 to −10 per gap
+  • Expected salary significantly above the budgeted range (if stated): −10 to −15
+  • Role level mismatch (e.g. junior candidate for a senior role): −15 to −25
+  • Domain/industry mismatch when it matters for the role: −10 to −15
+  Caps and calibration:
+  • 85–100 = near-perfect fit, almost no gaps — use sparingly
+  • 65–84 = strong candidate with only minor or recoverable gaps
+  • 45–64 = possible hire but notable gaps that need addressing in interviews
+  • 25–44 = significant misalignment, stretch hire
+  • 0–24 = not suitable
+  Do NOT round up. A candidate with 2 hard-requirement gaps should score at most 65.
+  "scoreRationale" must cite at least one specific match AND one specific gap (or "no significant gaps found" if truly none).`
     : ""
 }
 

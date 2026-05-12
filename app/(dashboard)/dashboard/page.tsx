@@ -136,12 +136,9 @@ export default async function OverviewPage() {
           </div>
           <h3 className="font-bold text-slate-900 text-lg">All caught up!</h3>
           <p className="mt-1 text-sm text-slate-500">No pending actions right now. Great work.</p>
-          <div className="mt-6 flex justify-center gap-3">
+          <div className="mt-6 flex justify-center">
             <Button asChild size="sm" className="rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 border-0 text-white hover:from-blue-700 hover:to-violet-700">
               <Link href="/candidates/new"><Icon name="plus" size={3.5} />Add candidate</Link>
-            </Button>
-            <Button asChild size="sm" variant="outline" className="rounded-lg border-slate-200">
-              <Link href="/pipeline">View pipeline</Link>
             </Button>
           </div>
         </div>

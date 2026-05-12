@@ -48,12 +48,9 @@ export default async function CandidatesPage() {
           </div>
           <h3 className="font-bold text-slate-900 text-lg">No candidates yet</h3>
           <p className="mt-1 text-sm text-slate-500 max-w-xs mx-auto">Upload a resume or paste call notes to get a structured profile and match score in seconds.</p>
-          <div className="mt-6 flex justify-center gap-3">
+          <div className="mt-6 flex justify-center">
             <Button asChild className="rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 border-0 text-white hover:from-blue-700 hover:to-violet-700">
               <Link href="/candidates/new"><Icon name="plus" size={4} />Screen candidate</Link>
-            </Button>
-            <Button asChild variant="outline" className="rounded-lg border-slate-200">
-              <Link href="/candidates/bulk"><Icon name="upload" size={4} />Bulk upload</Link>
             </Button>
           </div>
         </div>
