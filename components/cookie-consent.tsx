@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import posthog from "posthog-js";
 
-const STORAGE_KEY = "smartats:cookie-consent";
+const STORAGE_KEY = "optichire:cookie-consent";
 type Consent = "accepted" | "rejected" | null;
 
 function readConsent(): Consent {

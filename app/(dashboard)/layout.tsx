@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Icon } from "@/components/icons/icon";
+import { LogoOptichire } from "@/components/brand/logos";
 import { UsageBannerAsync } from "@/components/usage-banner-async";
 import { SidebarNav } from "@/components/sidebar-nav";
 import { PostHogIdentify } from "@/components/posthog-identify";
@@ -42,11 +43,8 @@ export default async function DashboardLayout({
       <aside className="hidden md:flex md:w-64 shrink-0 flex-col bg-white border-r border-slate-200/80 shadow-sm shadow-slate-900/[0.04]">
 
         {/* Logo */}
-        <div className="flex h-16 items-center gap-3 px-5 border-b border-slate-100">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 shadow-md shadow-blue-200">
-            <Icon name="sparkles" size={4} className="text-white" />
-          </div>
-          <span className="font-bold text-slate-900 text-base tracking-tight">Smart ATS</span>
+        <div className="flex h-16 items-center px-5 border-b border-slate-100">
+          <LogoOptichire size="sm" />
         </div>
 
         {/* Nav */}
@@ -86,12 +84,7 @@ export default async function DashboardLayout({
 
         {/* Mobile top bar */}
         <header className="flex md:hidden items-center justify-between px-4 h-14 bg-white border-b border-slate-200 sticky top-0 z-40 shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-violet-600">
-              <Icon name="sparkles" size={3.5} className="text-white" />
-            </div>
-            <span className="font-bold text-slate-900 text-sm tracking-tight">Smart ATS</span>
-          </div>
+          <LogoOptichire size="sm" />
           <div className="flex items-center gap-1">
             <Link href="/settings" className="rounded-lg p-2 text-slate-400 hover:bg-slate-100">
               <Icon name="settings" size={4} />

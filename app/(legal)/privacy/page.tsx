@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy · Smart ATS",
-  description: "How Smart ATS collects, uses, and protects personal data.",
+  title: "Privacy Policy · Optichire",
+  description: "How Optichire collects, uses, and protects personal data.",
 };
 
 const EFFECTIVE_DATE = "11 May 2026";
@@ -14,7 +14,7 @@ export default function PrivacyPage() {
       <p className="text-sm text-slate-400 !mt-0">Effective: {EFFECTIVE_DATE}</p>
 
       <p>
-        Smart ATS (&ldquo;<strong>we</strong>&rdquo;, &ldquo;<strong>us</strong>&rdquo;, &ldquo;<strong>our</strong>&rdquo;)
+        Optichire (&ldquo;<strong>we</strong>&rdquo;, &ldquo;<strong>us</strong>&rdquo;, &ldquo;<strong>our</strong>&rdquo;)
         provides an AI-powered applicant tracking and screening platform for recruiters. This policy explains
         what personal data we collect, why we collect it, how we use it, and the rights you have over it.
       </p>
@@ -26,14 +26,14 @@ export default function PrivacyPage() {
 
       <h2>1. Who we are</h2>
       <p>
-        Smart ATS is operated from India. For questions about this policy or your data, contact us at{" "}
-        <a href="mailto:privacy@smartats.in">privacy@smartats.in</a>.
+        Optichire is operated from India. For questions about this policy or your data, contact us at{" "}
+        <a href="mailto:privacy@optichire.com">privacy@optichire.com</a>.
       </p>
 
       <h2>2. Who this policy applies to</h2>
       <p>
-        Smart ATS is a <strong>business-to-business</strong> tool intended only for recruiters, hiring managers
-        and HR professionals (&ldquo;<strong>Users</strong>&rdquo;). Job candidates do not interact with Smart ATS
+        Optichire is a <strong>business-to-business</strong> tool intended only for recruiters, hiring managers
+        and HR professionals (&ldquo;<strong>Users</strong>&rdquo;). Job candidates do not interact with Optichire
         directly; their data is uploaded into the platform by a recruiter.
       </p>
       <ul>
@@ -154,7 +154,7 @@ export default function PrivacyPage() {
       <p>
         For candidates whose data has been uploaded by a recruiter: please contact that recruiter first as
         they are the data fiduciary. If they are unresponsive, write to{" "}
-        <a href="mailto:privacy@smartats.in">privacy@smartats.in</a> and we will assist.
+        <a href="mailto:privacy@optichire.com">privacy@optichire.com</a> and we will assist.
       </p>
 
       <h2>11. Security</h2>
@@ -169,7 +169,7 @@ export default function PrivacyPage() {
 
       <h2>12. Children</h2>
       <p>
-        Smart ATS is not intended for use by anyone under 18. Recruiters must not upload data of candidates
+        Optichire is not intended for use by anyone under 18. Recruiters must not upload data of candidates
         known to be minors.
       </p>
 
@@ -182,13 +182,13 @@ export default function PrivacyPage() {
       <h2>14. Grievance Officer</h2>
       <p>
         In accordance with the DPDP Act, our designated Grievance Officer can be reached at{" "}
-        <a href="mailto:grievance@smartats.in">grievance@smartats.in</a>. We will acknowledge complaints within
+        <a href="mailto:grievance@optichire.com">grievance@optichire.com</a>. We will acknowledge complaints within
         48 hours and resolve them within the statutory timeline.
       </p>
 
       <h2>15. Contact</h2>
       <p>
-        Email: <a href="mailto:privacy@smartats.in">privacy@smartats.in</a><br />
+        Email: <a href="mailto:privacy@optichire.com">privacy@optichire.com</a><br />
         For data subject requests, please write from the email address associated with your account so we can
         verify the request.
       </p>

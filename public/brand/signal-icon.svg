@@ -1,0 +1,24 @@
+<svg viewBox="0 0 60 48" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <defs>
+    <!-- Horizontal fade: transparent → solid → solid → transparent -->
+    <linearGradient id="pulse-g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#6366F1" stop-opacity="0.15"/>
+      <stop offset="22%"  stop-color="#6366F1" stop-opacity="1"/>
+      <stop offset="78%"  stop-color="#6366F1" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#6366F1" stop-opacity="0.15"/>
+    </linearGradient>
+  </defs>
+
+  <!-- EKG pulse line — baseline at y=24 (centre of 48px height) -->
+  <!-- Spike peak y=8 (+16 above), trough y=40 (−16 below) = balanced -->
+  <polyline
+    points="2,24 17,24 23,24 28,8 33,40 38,24 58,24"
+    stroke="url(#pulse-g)"
+    stroke-width="2.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+
+  <!-- Glowing dot at peak -->
+  <circle cx="28" cy="8" r="3.5" fill="#6366F1" opacity="0.9"/>
+  <circle cx="28" cy="8" r="6"   fill="#6366F1" opacity="0.15"/>
+</svg>

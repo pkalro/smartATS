@@ -117,7 +117,7 @@ export function HeroScene() {
           }}>
             Hire faster with <br />
             <span style={{
-              backgroundImage: "linear-gradient(135deg, #2563EB, #7C3AED)",
+              backgroundImage: "linear-gradient(135deg, #0EA5E9, #6366F1)",
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",

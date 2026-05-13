@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Data Processing Agreement · Smart ATS",
-  description: "How Smart ATS processes candidate data on behalf of recruiters.",
+  title: "Data Processing Agreement · Optichire",
+  description: "How Optichire processes candidate data on behalf of recruiters.",
 };
 
 const EFFECTIVE_DATE = "11 May 2026";
@@ -15,7 +15,7 @@ export default function DPAPage() {
 
       <p>
         This Data Processing Agreement (&ldquo;<strong>DPA</strong>&rdquo;) is between you, the recruiter using
-        Smart ATS (&ldquo;<strong>Controller</strong>&rdquo; / data fiduciary), and Smart ATS
+        Optichire (&ldquo;<strong>Controller</strong>&rdquo; / data fiduciary), and Optichire
         (&ldquo;<strong>Processor</strong>&rdquo; / data processor). It is incorporated into our{" "}
         <a href="/terms">Terms of Service</a> and governs candidate personal data you upload.
       </p>
@@ -37,7 +37,7 @@ export default function DPAPage() {
       <h2>3. Our obligations</h2>
       <p>We will:</p>
       <ul>
-        <li>Process candidate data only on your instructions, as expressed through your use of the Service or in writing to <a href="mailto:privacy@smartats.in">privacy@smartats.in</a>.</li>
+        <li>Process candidate data only on your instructions, as expressed through your use of the Service or in writing to <a href="mailto:privacy@optichire.com">privacy@optichire.com</a>.</li>
         <li>Ensure personnel with access to candidate data are bound by confidentiality.</li>
         <li>Implement technical and organisational measures appropriate to the risk (see &sect;6).</li>
         <li>Not engage a sub-processor without first listing them in the Privacy Policy.</li>
@@ -99,7 +99,7 @@ export default function DPAPage() {
       </p>
 
       <p>
-        Questions? Write to <a href="mailto:privacy@smartats.in">privacy@smartats.in</a>.
+        Questions? Write to <a href="mailto:privacy@optichire.com">privacy@optichire.com</a>.
       </p>
     </>
   );

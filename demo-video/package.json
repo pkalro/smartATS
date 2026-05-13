@@ -1,7 +1,7 @@
 {
-  "name": "smartats-demo-video",
+  "name": "optichire-demo-video",
   "version": "1.0.0",
-  "description": "Smart ATS product demo video",
+  "description": "Optichire product announcement video",
   "scripts": {
     "start": "npx remotion studio",
     "render": "npx remotion render src/index.ts Demo out/demo.mp4 --codec h264",

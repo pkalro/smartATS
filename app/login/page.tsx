@@ -1,8 +1,9 @@
 import { signIn, auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Sparkles, CheckCircle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import Link from "next/link";
+import { LogoOptichire } from "@/components/brand/logos";
 
 export default async function LoginPage({
   searchParams,
@@ -22,11 +23,8 @@ export default async function LoginPage({
         <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-violet-600/20 blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <div className="relative">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
-              <Sparkles className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-bold text-white text-xl tracking-tight">Smart ATS</span>
+          <Link href="/">
+            <LogoOptichire size="md" className="[&_span]:!text-white" />
           </Link>
         </div>
 
@@ -59,7 +57,7 @@ export default async function LoginPage({
         </div>
 
         <div className="relative text-xs text-blue-300/50">
-          © {new Date().getFullYear()} Smart ATS
+          © {new Date().getFullYear()} Optichire
         </div>
       </div>
 
@@ -67,11 +65,8 @@ export default async function LoginPage({
       <div className="flex flex-1 flex-col items-center justify-center p-8">
         <div className="w-full max-w-sm">
           {/* Mobile logo */}
-          <div className="flex items-center gap-2 mb-10 lg:hidden">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-violet-600">
-              <Sparkles className="h-4 w-4 text-white" />
-            </div>
-            <span className="font-bold text-slate-900 text-lg">Smart ATS</span>
+          <div className="mb-10 lg:hidden">
+            <LogoOptichire size="sm" />
           </div>
 
           <div className="mb-8">

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service · Smart ATS",
-  description: "The terms that govern your use of Smart ATS.",
+  title: "Terms of Service · Optichire",
+  description: "The terms that govern your use of Optichire.",
 };
 
 const EFFECTIVE_DATE = "11 May 2026";
@@ -14,7 +14,7 @@ export default function TermsPage() {
       <p className="text-sm text-slate-400 !mt-0">Effective: {EFFECTIVE_DATE}</p>
 
       <p>
-        These Terms govern your use of Smart ATS (the &ldquo;<strong>Service</strong>&rdquo;). By signing in,
+        These Terms govern your use of Optichire (the &ldquo;<strong>Service</strong>&rdquo;). By signing in,
         you agree to be bound by these Terms.
       </p>
 
@@ -53,7 +53,7 @@ export default function TermsPage() {
         compliance with applicable employment, equal-opportunity and non-discrimination laws.
       </p>
       <p>
-        Smart ATS scores and ratings are advisory only and do not constitute an automated decision under the
+        Optichire scores and ratings are advisory only and do not constitute an automated decision under the
         DPDP Act &mdash; a human (you) makes the final call.
       </p>
 
@@ -95,7 +95,7 @@ export default function TermsPage() {
 
       <h2>9. Intellectual property</h2>
       <p>
-        The Service, including its software, UI, and content (excluding Your Content), is owned by Smart ATS
+        The Service, including its software, UI, and content (excluding Your Content), is owned by Optichire
         and protected by intellectual property laws. You receive a non-exclusive, non-transferable licence to
         use the Service for the duration of your account.
       </p>
@@ -126,7 +126,7 @@ export default function TermsPage() {
       <p>
         These Terms are governed by the laws of India. Any dispute will be subject to the exclusive
         jurisdiction of the courts of Bengaluru, Karnataka. Before filing a suit, you agree to first contact{" "}
-        <a href="mailto:legal@smartats.in">legal@smartats.in</a> to attempt to resolve the dispute in good
+        <a href="mailto:legal@optichire.com">legal@optichire.com</a> to attempt to resolve the dispute in good
         faith.
       </p>
 
@@ -139,7 +139,7 @@ export default function TermsPage() {
 
       <h2>15. Contact</h2>
       <p>
-        Questions about these Terms? Write to <a href="mailto:legal@smartats.in">legal@smartats.in</a>.
+        Questions about these Terms? Write to <a href="mailto:legal@optichire.com">legal@optichire.com</a>.
       </p>
     </>
   );

@@ -150,7 +150,7 @@ export function CTAScene() {
       }}>
         <div style={{
           display: "flex", alignItems: "center", gap: 4,
-          background: "linear-gradient(135deg, #2563EB, #7C3AED)",
+          background: "linear-gradient(135deg, #0EA5E9, #6366F1)",
           borderRadius: 14, paddingLeft: 32, paddingRight: 32,
           paddingTop: 14, paddingBottom: 14,
           fontSize: 16, fontWeight: 700, color: "white",

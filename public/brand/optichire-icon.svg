@@ -1,0 +1,41 @@
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <defs>
+    <linearGradient id="og" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#0EA5E9"/>
+      <stop offset="100%" stop-color="#6366F1"/>
+    </linearGradient>
+    <!-- Soft inner glow -->
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#0EA5E9" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#6366F1" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Soft glow disc -->
+  <circle cx="24" cy="24" r="23" fill="url(#glow)"/>
+
+  <!-- Outer ring -->
+  <circle cx="24" cy="24" r="21" stroke="url(#og)" stroke-width="2.5"/>
+
+  <!--
+    Aperture lines — 6 chords spanning the circle, each rotated 60°.
+    Derived from the Lucide "aperture" icon (24×24 → scaled ×2 to 48×48):
+      Line 1: (14.31,8)→(20.05,17.94)  ×2 = (28.62,16)→(40.10,35.88)
+      Line 2: (9.69,8)→(21.17,8)       ×2 = (19.38,16)→(42.34,16)
+      Line 3: (7.38,12)→(13.12,2.06)   ×2 = (14.76,24)→(26.24,4.12)
+      Line 4: (9.69,16)→(3.95,6.06)    ×2 = (19.38,32)→(7.90,12.12)
+      Line 5: (14.31,16)→(2.83,16)     ×2 = (28.62,32)→(5.66,32)
+      Line 6: (16.62,12)→(10.88,21.94) ×2 = (33.24,24)→(21.76,43.88)
+  -->
+  <line x1="28.62" y1="16"    x2="40.10" y2="35.88" stroke="url(#og)" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="19.38" y1="16"    x2="42.34" y2="16"    stroke="url(#og)" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="14.76" y1="24"    x2="26.24" y2="4.12"  stroke="url(#og)" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="19.38" y1="32"    x2="7.90"  y2="12.12" stroke="url(#og)" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="28.62" y1="32"    x2="5.66"  y2="32"    stroke="url(#og)" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="33.24" y1="24"    x2="21.76" y2="43.88" stroke="url(#og)" stroke-width="1.8" stroke-linecap="round"/>
+
+  <!-- Centre iris — the "hire" you're focused on -->
+  <circle cx="24" cy="24" r="5.5" fill="url(#og)" opacity="0.18"/>
+  <circle cx="24" cy="24" r="3"   fill="url(#og)"/>
+  <circle cx="24" cy="24" r="1.2" fill="white"/>
+</svg>

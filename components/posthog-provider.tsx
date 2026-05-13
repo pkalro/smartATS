@@ -22,7 +22,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
 
     // Sync with stored consent (set by CookieConsent banner)
     try {
-      const stored = window.localStorage.getItem("smartats:cookie-consent");
+      const stored = window.localStorage.getItem("optichire:cookie-consent");
       if (stored === "accepted") posthog.opt_in_capturing();
       else posthog.opt_out_capturing();
     } catch { /* localStorage unavailable */ }

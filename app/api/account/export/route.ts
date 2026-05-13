@@ -55,7 +55,7 @@ export async function GET() {
   const payload = {
     exportedAt: new Date().toISOString(),
     notice:
-      "This export contains your personal data and the candidate data you uploaded to Smart ATS. " +
+      "This export contains your personal data and the candidate data you uploaded to Optichire. " +
       "You are responsible for keeping it secure and handling it in line with applicable privacy law.",
     user,
     jobs,
@@ -64,7 +64,7 @@ export async function GET() {
   };
 
   const json = JSON.stringify(payload, null, 2);
-  const filename = `smartats-export-${new Date().toISOString().slice(0, 10)}.json`;
+  const filename = `optichire-export-${new Date().toISOString().slice(0, 10)}.json`;
 
   return new NextResponse(json, {
     status: 200,

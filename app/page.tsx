@@ -7,6 +7,7 @@ import {
   Brain, ScanLine, MessageSquare, TrendingUp, Clock, Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LogoOptichire } from "@/components/brand/logos";
 
 export default async function LandingPage() {
   const session = await auth();
@@ -18,12 +19,7 @@ export default async function LandingPage() {
       {/* ── Nav ── */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-200/60 bg-white/75 backdrop-blur-xl shadow-sm shadow-slate-900/[0.04]">
         <div className="mx-auto max-w-6xl px-6 flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-violet-600">
-              <Sparkles className="h-4 w-4 text-white" />
-            </div>
-            <span className="font-bold text-slate-900 text-lg tracking-tight">Smart ATS</span>
-          </div>
+          <LogoOptichire size="sm" />
           <nav className="hidden md:flex items-center gap-8 text-sm text-slate-600">
             <a href="#features" className="hover:text-slate-900 transition-colors">Features</a>
             <a href="#workflow" className="hover:text-slate-900 transition-colors">How it works</a>
@@ -67,7 +63,7 @@ export default async function LandingPage() {
             </h1>
 
             <p className="mt-5 sm:mt-7 text-base sm:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed px-2">
-              Smart ATS turns messy job descriptions and raw resumes into structured pipelines, scored candidates, and interview-ready dossiers — in seconds, not hours.
+              Optichire turns messy job descriptions and raw resumes into structured pipelines, scored candidates, and interview-ready dossiers — in seconds, not hours.
             </p>
 
             <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
@@ -101,7 +97,7 @@ export default async function LandingPage() {
                   <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-green-400" />
                 </div>
                 <div className="flex-1 rounded-md bg-white border border-slate-200 px-3 py-1 text-[10px] sm:text-xs text-slate-400 max-w-[200px] sm:max-w-xs mx-auto text-center truncate">
-                  app.smartats.ai/pipeline
+                  app.optichire.com/pipeline
                 </div>
               </div>
 
@@ -234,7 +230,7 @@ export default async function LandingPage() {
         <section className="py-24 px-6">
           <div className="mx-auto max-w-5xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Recruiting ops eat your day.<br />Smart ATS gives it back.</h2>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Recruiting ops eat your day.<br />Optichire gives it back.</h2>
               <p className="mt-4 text-lg text-slate-500 max-w-xl mx-auto">Every manual step in your hiring workflow — we've automated it.</p>
             </div>
 
@@ -279,7 +275,7 @@ export default async function LandingPage() {
                       <p className="text-slate-600 text-sm leading-relaxed">{item.pain}</p>
                     </div>
                     <div>
-                      <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600 mb-1.5">Smart ATS fix</p>
+                      <p className="text-[11px] font-bold uppercase tracking-widest text-blue-600 mb-1.5">Optichire fix</p>
                       <p className="text-slate-700 text-sm leading-relaxed font-medium">{item.fix}</p>
                     </div>
                   </div>
@@ -477,7 +473,7 @@ export default async function LandingPage() {
               Your next great hire<br />is waiting in your inbox.
             </h2>
             <p className="mt-6 text-lg text-slate-500 max-w-lg mx-auto">
-              Stop drowning in resumes. Start Smart ATS today — free, no credit card, ready in 5 minutes.
+              Stop drowning in resumes. Start Optichire today — free, no credit card, ready in 5 minutes.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="h-14 px-10 text-base bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 border-0 text-white shadow-xl shadow-blue-200/60 rounded-xl font-bold">
@@ -495,18 +491,13 @@ export default async function LandingPage() {
       {/* ── Footer ── */}
       <footer className="border-t border-slate-100 py-10 px-6">
         <div className="mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-blue-600 to-violet-600">
-              <Sparkles className="h-3 w-3 text-white" />
-            </div>
-            <span className="font-bold text-slate-700 text-sm">Smart ATS</span>
-          </div>
-          <p className="text-xs text-slate-400">© {new Date().getFullYear()} Smart ATS. Built for recruiters who actually want to go home on time.</p>
+          <LogoOptichire size="sm" />
+          <p className="text-xs text-slate-400">© {new Date().getFullYear()} Optichire. Built for recruiters who actually want to go home on time.</p>
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-slate-400 justify-center">
             <Link href="/privacy" className="hover:text-slate-700 transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-slate-700 transition-colors">Terms</Link>
             <Link href="/dpa" className="hover:text-slate-700 transition-colors">Data processing</Link>
-            <a href="mailto:privacy@smartats.in" className="hover:text-slate-700 transition-colors">Contact</a>
+            <a href="mailto:privacy@optichire.com" className="hover:text-slate-700 transition-colors">Contact</a>
             <Link href="/login" className="hover:text-slate-700 transition-colors">Sign in</Link>
           </div>
         </div>

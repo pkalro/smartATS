@@ -162,7 +162,7 @@ function ExportTab({ exportRows, jobs }: { exportRows: ExportRow[]; jobs: { id: 
   });
   const preview = filtered.slice(0, 20);
   const today = new Date().toISOString().slice(0, 10);
-  const filename = `smartats-export-${today}.csv`;
+  const filename = `optichire-export-${today}.csv`;
 
   return (
     <div className="space-y-5">

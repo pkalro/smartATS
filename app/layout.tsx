@@ -4,8 +4,8 @@ import { PostHogProvider } from "@/components/posthog-provider";
 import { CookieConsent } from "@/components/cookie-consent";
 
 export const metadata: Metadata = {
-  title: "Smart ATS",
-  description: "AI-powered ATS for recruiters",
+  title: "Optichire",
+  description: "AI-powered recruiting for sharp hirers. Score resumes, generate screening kits, and close roles faster.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

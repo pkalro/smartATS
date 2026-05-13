@@ -66,18 +66,21 @@ export function Demo() {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
 
-  // Background music volume: fade in over first 30 frames, fade out over last 30 frames
+  // Background music:
+  //   • Reduced from 0.25 → 0.13 (music shouldn't compete with voice)
+  //   • Fade-out starts 3 s early (90 frames) so it's already quiet by the
+  //     time the voiceover reaches its final sentences
   const bgVolume = interpolate(
     frame,
-    [0, 30, durationInFrames - 30, durationInFrames],
-    [0, 0.25, 0.25, 0],
+    [0, 30, durationInFrames - 90, durationInFrames - 15],
+    [0, 0.13, 0.13, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Voiceover volume: fade in over first 10 frames, fade out over last 20 frames
+  // Voiceover: full volume throughout, short fade-out at the very end
   const voVolume = interpolate(
     frame,
-    [0, 10, durationInFrames - 20, durationInFrames],
+    [0, 10, durationInFrames - 25, durationInFrames],
     [0, 1, 1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
