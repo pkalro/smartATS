@@ -139,11 +139,6 @@ export default async function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Reports</h1>
-        <p className="text-muted-foreground">Pipeline analytics and exports</p>
-      </div>
-
       <ReportsClient
         totalCandidates={totalCandidates}
         activeInPipeline={activeInPipeline}
