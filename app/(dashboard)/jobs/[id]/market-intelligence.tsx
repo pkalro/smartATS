@@ -7,11 +7,13 @@ import { AlertTriangle, RefreshCw, Target } from "lucide-react";
 import { Icon } from "@/components/icons/icon";
 import type { MarketIntelligence, SkillScarcity } from "@/lib/ai/market";
 
+// pct = talent AVAILABILITY (inverse of scarcity).
+// Common → full bar (lots of candidates); Very scarce → tiny bar (almost none).
 const SCARCITY_CONFIG = {
-  LOW:       { label: "Common",      textColor: "text-green-600",  barColor: "bg-green-500",  pct: 25 },
-  MEDIUM:    { label: "Moderate",    textColor: "text-amber-600",  barColor: "bg-amber-400",  pct: 55 },
-  HIGH:      { label: "Scarce",      textColor: "text-orange-600", barColor: "bg-orange-500", pct: 78 },
-  VERY_HIGH: { label: "Very scarce", textColor: "text-red-600",    barColor: "bg-red-500",    pct: 96 },
+  LOW:       { label: "Common",      textColor: "text-green-600",  barColor: "bg-green-500",  pct: 90 },
+  MEDIUM:    { label: "Moderate",    textColor: "text-amber-500",  barColor: "bg-amber-400",  pct: 60 },
+  HIGH:      { label: "Scarce",      textColor: "text-orange-600", barColor: "bg-orange-500", pct: 30 },
+  VERY_HIGH: { label: "Very scarce", textColor: "text-red-600",    barColor: "bg-red-500",    pct: 10 },
 };
 
 type ScarcityKey = keyof typeof SCARCITY_CONFIG;
