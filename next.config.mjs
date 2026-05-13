@@ -10,6 +10,8 @@ const ContentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://*.googleusercontent.com https://*.gstatic.com https://*.posthog.com",
   "font-src 'self' data:",
+  // PostHog traffic now goes via /ingest proxy (same origin), but keep direct
+  // host as fallback in case the rewrite hasn't propagated yet.
   "connect-src 'self' https://*.posthog.com https://*.i.posthog.com https://vercel.live wss://ws-us3.pusher.com",
   "frame-src 'self' https://vercel.live",
   "frame-ancestors 'none'",
@@ -53,6 +55,26 @@ const nextConfig = {
       {
         source: "/:path*",
         headers: securityHeaders,
+      },
+    ];
+  },
+
+  // Proxy PostHog ingestion through our own domain so ad-blockers don't
+  // intercept the requests. The /ingest path is never publicly linked so
+  // it won't appear in sitemaps or CSP violations.
+  async rewrites() {
+    return [
+      {
+        source: "/ingest/static/:path*",
+        destination: "https://us-assets.i.posthog.com/static/:path*",
+      },
+      {
+        source: "/ingest/:path*",
+        destination: "https://us.i.posthog.com/:path*",
+      },
+      {
+        source: "/ingest/decide",
+        destination: "https://us.i.posthog.com/decide",
       },
     ];
   },

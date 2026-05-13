@@ -10,10 +10,12 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     if (!key) return;
 
     posthog.init(key, {
-      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://app.posthog.com",
-      capture_pageview: false,        // handled manually by the page view hook
+      // Route through our own domain so ad-blockers don't intercept events.
+      api_host: "/ingest",
+      ui_host: "https://us.posthog.com",
+      capture_pageview: false,        // fired manually by PostHogPageView on every route change
       capture_pageleave: true,
-      respect_dnt: true,
+      capture_heatmaps: true,
       // Default to opted-out. The CookieConsent banner flips this to opt-in if the user accepts.
       opt_out_capturing_by_default: true,
       persistence: "localStorage+cookie",

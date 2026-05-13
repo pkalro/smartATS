@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { PostHogProvider } from "@/components/posthog-provider";
+import { PostHogPageView } from "@/components/posthog-pageview";
 import { CookieConsent } from "@/components/cookie-consent";
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="min-h-screen bg-background font-sans antialiased">
         <PostHogProvider>
+          <PostHogPageView />
           {children}
           <CookieConsent />
         </PostHogProvider>
