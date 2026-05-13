@@ -43,9 +43,35 @@ export default async function JobDetailPage({
   const job = await prisma.job.findFirst({
     where: { id, userId: session!.user.id },
     include: {
+      // Path A: candidates linked via CandidateJobApplication (join table)
+      candidateApplications: {
+        orderBy: [{ score: "desc" }, { createdAt: "desc" }],
+        take: 50,
+        include: {
+          candidate: {
+            select: {
+              id: true,
+              name: true,
+              currentTitle: true,
+              noticePeriod: true,
+              currentSalary: true,
+            },
+          },
+        },
+      },
+      // Path B: candidates linked via direct Candidate.jobId FK
       candidates: {
         orderBy: [{ score: "desc" }, { createdAt: "desc" }],
         take: 50,
+        select: {
+          id: true,
+          name: true,
+          currentTitle: true,
+          score: true,
+          noticePeriod: true,
+          currentSalary: true,
+          status: true,
+        },
       },
       shareLinks: {
         where: { revokedAt: null },
@@ -56,12 +82,45 @@ export default async function JobDetailPage({
   });
   if (!job) notFound();
 
+  // Merge both paths; prefer application row (has job-specific score/status) over direct link.
+  // Deduplicate by candidate id — application row wins if present in both.
+  const seen = new Set<string>();
+  const jobCandidates: {
+    id: string; name: string | null; currentTitle: string | null;
+    score: number | null; noticePeriod: string | null; currentSalary: string | null; status: string;
+  }[] = [];
+
+  // Application rows first (authoritative score/status per job)
+  for (const app of job.candidateApplications) {
+    if (!seen.has(app.candidate.id)) {
+      seen.add(app.candidate.id);
+      jobCandidates.push({
+        id: app.candidate.id,
+        name: app.candidate.name,
+        currentTitle: app.candidate.currentTitle,
+        score: app.score,
+        noticePeriod: app.candidate.noticePeriod,
+        currentSalary: app.candidate.currentSalary,
+        status: app.status,
+      });
+    }
+  }
+  // Direct-link rows as fallback (legacy data before join table existed)
+  for (const c of job.candidates) {
+    if (!seen.has(c.id)) {
+      seen.add(c.id);
+      jobCandidates.push(c);
+    }
+  }
+  // Sort merged list by score desc
+  jobCandidates.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
+
   const marketIntel: MarketIntelligence | null = job.marketIntelligence
     ? (() => { try { return JSON.parse(job.marketIntelligence!); } catch { return null; } })()
     : null;
 
   // Silver medalists
-  const existingCandidateIds = new Set(job.candidates.map((c) => c.id));
+  const existingCandidateIds = new Set(jobCandidates.map((c) => c.id));
   const silverRaw = await prisma.candidateJobApplication.findMany({
     where: {
       job: { userId: session!.user.id },
@@ -131,7 +190,7 @@ export default async function JobDetailPage({
               )}
               <span className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground">
                 <svg viewBox="0 0 16 16" className="h-3 w-3 fill-current"><circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none"/><path d="M8 4v4l3 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/></svg>
-                {job.candidates.length} candidates
+                {jobCandidates.length} candidates
               </span>
             </div>
           </div>
@@ -274,7 +333,7 @@ export default async function JobDetailPage({
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                 <div>
                   <CardTitle className="text-base">Screened candidates</CardTitle>
-                  <CardDescription>{job.candidates.length} total</CardDescription>
+                  <CardDescription>{jobCandidates.length} total</CardDescription>
                 </div>
                 <Button asChild size="sm">
                   <Link href={`/candidates/new?jobId=${job.id}`}>
@@ -283,7 +342,7 @@ export default async function JobDetailPage({
                 </Button>
               </CardHeader>
               <CardContent>
-                {job.candidates.length === 0 ? (
+                {jobCandidates.length === 0 ? (
                   <div className="flex flex-col items-center gap-3 py-12 text-center">
                     <p className="text-sm text-muted-foreground">No candidates screened yet.</p>
                     <Button asChild size="sm">
@@ -291,17 +350,7 @@ export default async function JobDetailPage({
                     </Button>
                   </div>
                 ) : (
-                  <JobCandidatesTable
-                    candidates={job.candidates.map((c) => ({
-                      id: c.id,
-                      name: c.name,
-                      currentTitle: c.currentTitle,
-                      score: c.score,
-                      noticePeriod: c.noticePeriod,
-                      currentSalary: c.currentSalary,
-                      status: c.status,
-                    }))}
-                  />
+                  <JobCandidatesTable candidates={jobCandidates} />
                 )}
               </CardContent>
             </Card>

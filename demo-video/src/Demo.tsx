@@ -1,6 +1,6 @@
 /**
  * Main Demo composition — assembles all scenes with Sequence + CrossFade.
- * Total duration: ~1440 frames = 48 seconds @ 30fps
+ * Total duration: ~1800 frames = 60 seconds @ 30fps
  */
 import React from "react";
 import { Audio, Sequence, staticFile, useCurrentFrame, useVideoConfig, interpolate } from "remotion";
@@ -16,12 +16,12 @@ import { CrossFade, SceneLabel } from "./components/Transition";
 // Scene durations in frames (30fps)
 const SCENES = [
   { name: "01-Hero",         dur: 150 },   // 5s  — brand intro
-  { name: "02-Upload",       dur: 240 },   // 8s  — upload + score
-  { name: "03-ScreeningKit", dur: 240 },   // 8s  — screening kit
-  { name: "04-Pipeline",     dur: 210 },   // 7s  — pipeline kanban
-  { name: "05-BulkUpload",   dur: 210 },   // 7s  — bulk upload
-  { name: "06-MarketIntel",  dur: 210 },   // 7s  — market intelligence
-  { name: "07-CTA",          dur: 180 },   // 6s  — CTA / outro
+  { name: "02-Upload",       dur: 270 },   // 9s  — upload + score
+  { name: "03-ScreeningKit", dur: 300 },   // 10s — screening kit
+  { name: "04-Pipeline",     dur: 270 },   // 9s  — pipeline kanban
+  { name: "05-BulkUpload",   dur: 270 },   // 9s  — bulk upload
+  { name: "06-MarketIntel",  dur: 270 },   // 9s  — market intelligence
+  { name: "07-CTA",          dur: 270 },   // 9s  — CTA / outro
 ] as const;
 
 // Build cumulative start frames

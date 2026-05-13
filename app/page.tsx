@@ -19,7 +19,7 @@ export default async function LandingPage() {
       {/* ── Nav ── */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-200/60 bg-white/75 backdrop-blur-xl shadow-sm shadow-slate-900/[0.04]">
         <div className="mx-auto max-w-6xl px-6 flex h-16 items-center justify-between">
-          <LogoOptichire size="sm" />
+          <LogoOptichire size="md" />
           <nav className="hidden md:flex items-center gap-8 text-sm text-slate-600">
             <a href="#features" className="hover:text-slate-900 transition-colors">Features</a>
             <a href="#workflow" className="hover:text-slate-900 transition-colors">How it works</a>
@@ -491,7 +491,7 @@ export default async function LandingPage() {
       {/* ── Footer ── */}
       <footer className="border-t border-slate-100 py-10 px-6">
         <div className="mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <LogoOptichire size="sm" />
+          <LogoOptichire size="md" />
           <p className="text-xs text-slate-400">© {new Date().getFullYear()} Optichire. Built for recruiters who actually want to go home on time.</p>
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-slate-400 justify-center">
             <Link href="/privacy" className="hover:text-slate-700 transition-colors">Privacy</Link>

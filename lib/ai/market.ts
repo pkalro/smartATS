@@ -1,5 +1,11 @@
 import { askJSON } from "@/lib/ai";
 
+export type SkillScarcity = {
+  skill: string;
+  level: "LOW" | "MEDIUM" | "HIGH" | "VERY_HIGH";
+  note: string;
+};
+
 export type MarketIntelligence = {
   salaryMin: number;
   salaryMax: number;
@@ -7,6 +13,7 @@ export type MarketIntelligence = {
   currency: string;
   scarcity: "LOW" | "MEDIUM" | "HIGH" | "VERY_HIGH";
   scarcityReason: string;
+  skillScarcity: SkillScarcity[];
   insights: string[];
   budgetReality: string;
   hmTalkingPoints: string[];
@@ -44,8 +51,16 @@ Return this exact JSON shape:
   "salaryMax": <annual CTC in local currency, integer>,
   "salaryMedian": <annual CTC in local currency, integer>,
   "currency": <"INR" or "USD" or "GBP" etc based on location>,
-  "scarcity": <MUST be exactly one of these four strings: "LOW" | "MEDIUM" | "HIGH" | "VERY_HIGH">,
-  "scarcityReason": <1-2 sentences explaining the scarcity rating>,
+  "scarcity": <overall role scarcity — MUST be exactly one of: "LOW" | "MEDIUM" | "HIGH" | "VERY_HIGH">,
+  "scarcityReason": <1-2 sentences explaining the overall scarcity rating>,
+  "skillScarcity": [
+    {
+      "skill": <skill or competency name, e.g. "Kubernetes", "MERN Stack", "Revenue Leadership">,
+      "level": <MUST be exactly one of: "LOW" | "MEDIUM" | "HIGH" | "VERY_HIGH">,
+      "note": <one short sentence on why this skill has this scarcity in the talent market>
+    }
+    // 4-7 entries covering the most differentiating skills/competencies for this role
+  ],
   "insights": [<3-5 short bullet strings about the market for this role>],
   "budgetReality": <1-2 sentences on whether the implied budget matches market reality>,
   "hmTalkingPoints": [<3 data-backed points a recruiter can use with a hiring manager to calibrate expectations>],

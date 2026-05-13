@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { generateMarketIntelligenceAction } from "../actions";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Icon } from "@/components/icons/icon";
-import type { MarketIntelligence } from "@/lib/ai/market";
+import type { MarketIntelligence, SkillScarcity } from "@/lib/ai/market";
 
 const SCARCITY_CONFIG = {
   LOW:       { label: "Common",      color: "text-green-700 bg-green-50 border-green-200",    bar: "bg-green-400",  pct: 25 },
@@ -138,32 +138,64 @@ export function MarketIntelligencePanel({
       {intel && (
         <div className="grid gap-4 md:grid-cols-2">
           {/* Salary bell curve */}
-          <div className="rounded-lg border bg-card p-4 space-y-3">
+          <div className="rounded-lg border bg-card p-4 space-y-3 md:col-span-2">
             <h3 className="text-sm font-semibold">Salary range</h3>
             <BellCurve min={intel.salaryMin} median={intel.salaryMedian} max={intel.salaryMax} currency={intel.currency} />
             <p className="text-xs text-muted-foreground italic">{intel.budgetReality}</p>
           </div>
 
-          {/* Scarcity */}
-          <div className="rounded-lg border bg-card p-4 space-y-3">
-            <h3 className="text-sm font-semibold">Profile scarcity</h3>
+          {/* Scarcity — overall badge + skill-by-skill breakdown */}
+          <div className="rounded-lg border bg-card p-4 space-y-3 md:col-span-2">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold">Profile scarcity</h3>
+              {(() => {
+                const cfg = SCARCITY_CONFIG[normalizeScarcity(intel.scarcity)];
+                return (
+                  <span className={`rounded-full border px-3 py-0.5 text-xs font-semibold ${cfg.color}`}>
+                    Overall: {cfg.label}
+                  </span>
+                );
+              })()}
+            </div>
+
+            {/* Overall bar + reason */}
             {(() => {
               const cfg = SCARCITY_CONFIG[normalizeScarcity(intel.scarcity)];
               return (
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Icon name="users" size={4} className="text-muted-foreground" />
-                    <span className={`rounded-full border px-3 py-0.5 text-sm font-medium ${cfg.color}`}>
-                      {cfg.label}
-                    </span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-muted">
-                    <div className={`h-2 rounded-full ${cfg.bar} transition-all`} style={{ width: `${cfg.pct}%` }} />
+                <div className="space-y-1.5">
+                  <div className="h-1.5 w-full rounded-full bg-muted">
+                    <div className={`h-1.5 rounded-full ${cfg.bar} transition-all`} style={{ width: `${cfg.pct}%` }} />
                   </div>
                   <p className="text-xs text-muted-foreground">{intel.scarcityReason}</p>
                 </div>
               );
             })()}
+
+            {/* Skill-by-skill rows */}
+            {intel.skillScarcity && intel.skillScarcity.length > 0 && (
+              <div className="pt-1 space-y-2">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">By skill</p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {intel.skillScarcity.map((s: SkillScarcity) => {
+                    const cfg = SCARCITY_CONFIG[normalizeScarcity(s.level)];
+                    return (
+                      <div key={s.skill} className="flex items-start gap-2.5 rounded-lg bg-slate-50 border border-slate-100 px-3 py-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-xs font-semibold text-slate-800">{s.skill}</span>
+                            <span className={`rounded-full border px-2 py-0 text-[10px] font-bold ${cfg.color}`}>{cfg.label}</span>
+                          </div>
+                          <div className="mt-1 h-1 w-full rounded-full bg-slate-200">
+                            <div className={`h-1 rounded-full ${cfg.bar}`} style={{ width: `${cfg.pct}%` }} />
+                          </div>
+                          <p className="mt-1 text-[11px] text-slate-500 leading-snug">{s.note}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Market insights */}

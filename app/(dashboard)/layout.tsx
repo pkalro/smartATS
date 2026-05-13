@@ -44,33 +44,38 @@ export default async function DashboardLayout({
 
         {/* Logo */}
         <div className="flex h-16 items-center px-5 border-b border-slate-100">
-          <LogoOptichire size="md" />
+          <Link href="/dashboard">
+            <LogoOptichire size="md" />
+          </Link>
         </div>
 
         {/* Nav */}
         <SidebarNav />
 
         {/* User footer */}
-        <div className="border-t border-slate-100 p-3">
-          <div className="flex items-center gap-3 rounded-xl bg-slate-50 p-3">
+        <div className="border-t border-slate-100 p-3 space-y-1">
+          {/* User identity row */}
+          <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-2.5">
             {avatar}
             <div className="flex-1 min-w-0">
               <p className="truncate text-sm font-semibold text-slate-800">{session.user.name}</p>
               <p className="truncate text-[11px] text-slate-400">Recruiter</p>
             </div>
-            <form action={async () => { "use server"; await signOut({ redirectTo: "/" }); }}>
-              <button
-                type="submit"
-                title="Sign out"
-                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-200 hover:text-slate-700 transition-colors"
-              >
-                <Icon name="log-out" size={3.5} />
-              </button>
-            </form>
           </div>
 
+          {/* Sign out row — always visible */}
+          <form action={async () => { "use server"; await signOut({ redirectTo: "/" }); }}>
+            <button
+              type="submit"
+              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-500 hover:bg-red-50 hover:text-red-600 transition-colors"
+            >
+              <Icon name="log-out" size={4} />
+              Sign out
+            </button>
+          </form>
+
           {/* Legal links */}
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-3 pt-2.5 text-[10px] text-slate-400">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-3 pt-1 text-[10px] text-slate-400">
             <Link href="/privacy" className="hover:text-slate-700">Privacy</Link>
             <Link href="/terms" className="hover:text-slate-700">Terms</Link>
             <Link href="/dpa" className="hover:text-slate-700">DPA</Link>
@@ -84,7 +89,7 @@ export default async function DashboardLayout({
 
         {/* Mobile top bar */}
         <header className="flex md:hidden items-center justify-between px-4 h-14 bg-white border-b border-slate-200 sticky top-0 z-40 shrink-0">
-          <LogoOptichire size="sm" />
+          <Link href="/dashboard"><LogoOptichire size="sm" /></Link>
           <div className="flex items-center gap-1">
             <Link href="/settings" className="rounded-lg p-2 text-slate-400 hover:bg-slate-100">
               <Icon name="settings" size={4} />
