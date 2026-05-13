@@ -74,6 +74,6 @@ Scarcity calibration guide — pick the ONE that best fits:
 - "VERY_HIGH"→ Extremely rare combination; top-of-market comp required; often 2-3+ months to fill (e.g. principal engineer, AI researcher, CTO-calibre, hyper-niche stack in a specific domain)
 
 Be accurate — do NOT default to HIGH. Most roles are MEDIUM. Only use HIGH or VERY_HIGH when the skill combination is genuinely rare.`,
-    maxTokens: 1024,
+    maxTokens: 2048,
   });
 }
