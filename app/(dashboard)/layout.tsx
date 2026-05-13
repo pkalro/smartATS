@@ -44,7 +44,7 @@ export default async function DashboardLayout({
 
         {/* Logo */}
         <div className="flex h-16 items-center px-5 border-b border-slate-100">
-          <LogoOptichire size="sm" />
+          <LogoOptichire size="md" />
         </div>
 
         {/* Nav */}

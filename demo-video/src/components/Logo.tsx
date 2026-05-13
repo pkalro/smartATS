@@ -4,7 +4,7 @@ import React from "react";
  * Optichire logo for Remotion video.
  * Aperture icon (optic + hire metaphor) + "optic hire" wordmark.
  */
-export function Logo({ size = 40 }: { size?: number }) {
+export function Logo({ size = 40, light = false }: { size?: number; light?: boolean }) {
   const fontSize = size * 0.55;
   const gap = size * 0.32;
 
@@ -70,8 +70,8 @@ export function Logo({ size = 40 }: { size?: number }) {
           gap: 0,
         }}
       >
-        <span style={{ fontWeight: 500, color: "#0F172A" }}>optic</span>
-        <span style={{ fontWeight: 800, color: "#0F172A" }}>hire</span>
+        <span style={{ fontWeight: 500, color: light ? "rgba(255,255,255,0.85)" : "#0F172A" }}>optic</span>
+        <span style={{ fontWeight: 800, color: light ? "#ffffff" : "#0F172A" }}>hire</span>
       </span>
     </div>
   );

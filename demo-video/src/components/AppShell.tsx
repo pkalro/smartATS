@@ -67,21 +67,28 @@ export function AppShell({
         {/* Logo */}
         <div style={{ padding: "20px 20px 16px", borderBottom: `1px solid ${colors.border}` }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{
-              width: 32, height: 32, borderRadius: 8,
-              background: "linear-gradient(135deg, #2563EB, #7C3AED)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              boxShadow: "0 4px 12px rgba(124,58,237,0.3)",
-            }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M12 3L13.2 8.8L19 10L13.2 11.2L12 17L10.8 11.2L5 10L10.8 8.8Z"
-                  stroke="white" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M19 3L19.6 5.4L22 6L19.6 6.6L19 9L18.4 6.6L16 6L18.4 5.4Z"
-                  stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <span style={{ fontWeight: 800, fontSize: 15, color: colors.text, letterSpacing: "-0.02em" }}>
-              Smart<span style={{ color: colors.blue }}>ATS</span>
+            {/* Aperture icon */}
+            <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="shell-g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#0EA5E9"/>
+                  <stop offset="100%" stopColor="#6366F1"/>
+                </linearGradient>
+              </defs>
+              <circle cx="24" cy="24" r="21" stroke="url(#shell-g)" strokeWidth="2.5"/>
+              <line x1="28.62" y1="16"  x2="40.10" y2="35.88" stroke="url(#shell-g)" strokeWidth="1.8" strokeLinecap="round"/>
+              <line x1="19.38" y1="16"  x2="42.34" y2="16"    stroke="url(#shell-g)" strokeWidth="1.8" strokeLinecap="round"/>
+              <line x1="14.76" y1="24"  x2="26.24" y2="4.12"  stroke="url(#shell-g)" strokeWidth="1.8" strokeLinecap="round"/>
+              <line x1="19.38" y1="32"  x2="7.90"  y2="12.12" stroke="url(#shell-g)" strokeWidth="1.8" strokeLinecap="round"/>
+              <line x1="28.62" y1="32"  x2="5.66"  y2="32"    stroke="url(#shell-g)" strokeWidth="1.8" strokeLinecap="round"/>
+              <line x1="33.24" y1="24"  x2="21.76" y2="43.88" stroke="url(#shell-g)" strokeWidth="1.8" strokeLinecap="round"/>
+              <circle cx="24" cy="24" r="3" fill="url(#shell-g)"/>
+              <circle cx="24" cy="24" r="1.2" fill="white"/>
+            </svg>
+            {/* Wordmark */}
+            <span style={{ fontSize: 15, letterSpacing: "-0.03em", lineHeight: 1 }}>
+              <span style={{ fontWeight: 500, color: colors.text }}>optic</span>
+              <span style={{ fontWeight: 800, color: colors.text }}>hire</span>
             </span>
           </div>
         </div>
@@ -157,7 +164,7 @@ export function AppShell({
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{
               height: 28, paddingLeft: 12, paddingRight: 12, borderRadius: 8,
-              background: "linear-gradient(135deg, #2563EB, #7C3AED)",
+              background: "linear-gradient(135deg, #0EA5E9, #6366F1)",
               display: "flex", alignItems: "center",
               fontSize: 12, fontWeight: 600, color: "white",
               gap: 6,

@@ -1,5 +1,5 @@
 /**
- * Unified icon component for SmartATS.
+ * Unified icon component for Optichire.
  *
  * Usage:
  *   <Icon name="briefcase" size={5} className="text-slate-500" />

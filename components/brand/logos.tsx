@@ -32,9 +32,9 @@ export function LogoOptichire({
   mono?: boolean;
   className?: string;
 }) {
-  const h = { sm: 28, md: 36, lg: 48, xl: 64 }[size];
-  const gap = h * 0.3;
-  const fontSize = h * 0.58;
+  const h = { sm: 32, md: 40, lg: 52, xl: 68 }[size];
+  const gap = h * 0.28;
+  const fontSize = h * 0.62;
   const ls = -fontSize * 0.04;
 
   // Unique gradient IDs per size to avoid SVG conflicts
@@ -101,7 +101,7 @@ export function LogoOptichire({
         <circle cx="24" cy="24" r="1.2" fill="white" />
       </svg>
 
-      {/* Wordmark: optic (regular) + hire (bold) */}
+      {/* Wordmark: optic (semibold) + hire (extrabold) */}
       {mark && (
         <span
           style={{
@@ -111,11 +111,10 @@ export function LogoOptichire({
             letterSpacing: ls,
             fontFamily:
               "-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif",
-            color: "#0F172A",
           }}
         >
-          <span style={{ fontWeight: 500 }}>optic</span>
-          <span style={{ fontWeight: 800 }}>hire</span>
+          <span style={{ fontWeight: 600, color: "#334155" }}>optic</span>
+          <span style={{ fontWeight: 800, color: "#0F172A" }}>hire</span>
         </span>
       )}
     </div>

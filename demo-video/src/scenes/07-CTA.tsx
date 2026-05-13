@@ -77,7 +77,7 @@ export function CTAScene() {
         opacity: logoOpacity,
         transform: `scale(${0.8 + logoSpring * 0.2})`,
       }}>
-        <Logo size={52} />
+        <Logo size={52} light />
       </div>
 
       {/* Headline */}
