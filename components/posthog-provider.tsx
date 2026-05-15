@@ -16,8 +16,6 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
       capture_pageview: false,        // fired manually by PostHogPageView on every route change
       capture_pageleave: true,
       capture_heatmaps: true,
-      // Prevent PostHog from injecting its toolbar UI into the page.
-      disable_toolbar: true,
       // Default to opted-out. The CookieConsent banner flips this to opt-in if the user accepts.
       opt_out_capturing_by_default: true,
       persistence: "localStorage+cookie",
