@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import {
   Sparkles, FileText, Users, CalendarClock, ChevronRight,
-  Search, BarChart3, Zap, CheckCircle, ArrowRight,
+  Search, BarChart3, ArrowRight,
   Brain, ScanLine, MessageSquare, TrendingUp, Clock, Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,14 +23,13 @@ export default async function LandingPage() {
           <nav className="hidden md:flex items-center gap-8 text-sm text-slate-600">
             <a href="#features" className="hover:text-slate-900 transition-colors">Features</a>
             <a href="#workflow" className="hover:text-slate-900 transition-colors">How it works</a>
-            <a href="#pricing" className="hover:text-slate-900 transition-colors">Free plan</a>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
               Sign in
             </Link>
             <Button asChild size="sm" className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 border-0 text-white shadow-md shadow-blue-200">
-              <Link href="/login">Get started free</Link>
+              <Link href="/login">Get started</Link>
             </Button>
           </div>
         </div>
@@ -40,7 +39,6 @@ export default async function LandingPage() {
 
         {/* ── Hero ── */}
         <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 px-5 sm:px-6">
-          {/* Background gradient blob */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-gradient-to-br from-blue-100 via-violet-100 to-indigo-50 opacity-60 blur-3xl" />
           </div>
@@ -48,7 +46,7 @@ export default async function LandingPage() {
           <div className="relative mx-auto max-w-4xl text-center">
             {/* Pill badge */}
             <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 sm:px-4 py-1.5 text-xs font-semibold text-blue-700 mb-6 sm:mb-8">
-              <Zap className="h-3.5 w-3.5 shrink-0" />
+              <Sparkles className="h-3.5 w-3.5 shrink-0" />
               AI-powered · Built for solo recruiters & small teams
             </div>
 
@@ -69,19 +67,12 @@ export default async function LandingPage() {
             <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
               <Button asChild size="lg" className="w-full sm:w-auto h-12 sm:h-13 px-8 text-base bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 border-0 text-white shadow-lg shadow-blue-200/60 rounded-xl">
                 <Link href="/login" className="flex items-center justify-center gap-2">
-                  Start for free <ArrowRight className="h-4 w-4" />
+                  Get started <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
               <a href="#workflow" className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
                 See how it works <ChevronRight className="h-4 w-4" />
               </a>
-            </div>
-
-            {/* Social proof micro-strip */}
-            <div className="mt-8 sm:mt-14 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-400 font-medium">
-              <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-green-500" /> No credit card required</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-green-500" /> Setup in under 5 minutes</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-green-500" /> AI-powered screening</span>
             </div>
           </div>
 
@@ -103,7 +94,6 @@ export default async function LandingPage() {
 
               {/* Mock pipeline UI */}
               <div className="bg-slate-50">
-                {/* Mockup header — compact on mobile */}
                 <div className="flex items-center justify-between px-3 sm:px-6 pt-3 sm:pt-5 pb-3 sm:pb-4 gap-2">
                   <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                     <div className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
@@ -124,7 +114,6 @@ export default async function LandingPage() {
                   </div>
                 </div>
 
-                {/* Kanban — horizontal scroll on mobile, 5-col grid on desktop */}
                 <div className="overflow-x-auto pb-4 sm:pb-6 px-3 sm:px-6 scrollbar-none">
                   <div className="flex gap-2.5 sm:gap-3 min-w-[640px] sm:min-w-0 sm:grid sm:grid-cols-5">
                     {[
@@ -168,7 +157,6 @@ export default async function LandingPage() {
                   </div>
                 </div>
 
-                {/* Swipe hint — mobile only */}
                 <div className="sm:hidden flex items-center justify-center gap-1.5 pb-3 text-[10px] text-slate-300">
                   <span>←</span> swipe to explore <span>→</span>
                 </div>
@@ -296,7 +284,6 @@ export default async function LandingPage() {
             </div>
 
             <div className="relative">
-              {/* Connecting line */}
               <div className="absolute left-6 top-8 bottom-8 w-px bg-gradient-to-b from-blue-500 via-violet-500 to-emerald-500 hidden sm:block" />
 
               <div className="space-y-6">
@@ -437,52 +424,22 @@ export default async function LandingPage() {
           </div>
         </section>
 
-        {/* ── Pricing ── */}
-        <section id="pricing" className="py-24 px-6 bg-slate-50 border-y border-slate-200">
-          <div className="mx-auto max-w-2xl text-center">
-            <div className="mb-14">
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Completely free</h2>
-              <p className="mt-4 text-lg text-slate-500">No credit card. No hidden fees. Just start recruiting smarter.</p>
-            </div>
-
-            <div className="rounded-2xl border-2 border-blue-500 bg-white p-10 shadow-xl shadow-blue-100/60 mx-auto max-w-md">
-              <div className="text-5xl font-extrabold text-slate-900 mb-1">$0</div>
-              <div className="text-slate-400 text-sm mb-8">Free forever</div>
-              <ul className="space-y-3 mb-8 text-left">
-                {["100 AI calls / month", "Unlimited jobs", "Unlimited candidates", "Full pipeline & scoring", "Bulk resume upload", "Market intelligence reports", "CSV export"].map((i) => (
-                  <li key={i} className="flex items-center gap-2 text-sm text-slate-600">
-                    <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />{i}
-                  </li>
-                ))}
-              </ul>
-              <Button asChild className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 border-0 text-white shadow-md font-bold h-12">
-                <Link href="/login">Get started free</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-
         {/* ── Final CTA ── */}
-        <section className="py-28 px-6">
+        <section className="py-28 px-6 bg-slate-50 border-t border-slate-200">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-xs font-semibold text-blue-700 mb-8">
-              <Sparkles className="h-3.5 w-3.5" />
-              Free to use — no credit card needed
-            </div>
             <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
               Your next great hire<br />is waiting in your inbox.
             </h2>
             <p className="mt-6 text-lg text-slate-500 max-w-lg mx-auto">
-              Stop drowning in resumes. Start Optichire today — free, no credit card, ready in 5 minutes.
+              Stop drowning in resumes. Start making better hiring decisions, faster.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="h-14 px-10 text-base bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 border-0 text-white shadow-xl shadow-blue-200/60 rounded-xl font-bold">
                 <Link href="/login" className="flex items-center gap-2">
-                  Get started — it's free <ArrowRight className="h-4 w-4" />
+                  Get started <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
             </div>
-            <p className="mt-4 text-xs text-slate-400">No credit card required · 100 free AI calls every month</p>
           </div>
         </section>
 
